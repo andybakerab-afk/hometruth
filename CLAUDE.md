@@ -5,16 +5,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-npm run dev       # Start dev server (Vite, hot reload)
+npm run dev       # Start dev server (Next.js, hot reload)
 npm run build     # Production build
-npm run preview   # Preview production build locally
+npm run start     # Run production build locally
 ```
 
 No test suite is configured.
 
 ## Architecture
 
-This is a single-file React demo (`src/App.jsx`) — a mobile phone mockup UI for the Hometruth product (by Pickle, Melbourne). There is no routing, no backend, no state management library.
+This is a Next.js App Router demo — a mobile phone mockup UI for the Hometruth product (by Pickle, Melbourne). There is no routing (beyond Next.js), no backend, no state management library.
+
+**File structure:**
+- `app/layout.tsx` — root layout with metadata and Google Fonts link
+- `app/page.tsx` — main page, imports `HometruthApp`
+- `components/HometruthApp.jsx` — the full app component (`'use client'`)
+- `src/theme.js` — design token palette
 
 **Key patterns:**
 
