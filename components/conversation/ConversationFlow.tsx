@@ -159,7 +159,7 @@ export function ConversationFlow({ onComplete }: ConversationFlowProps) {
                   <Image src="/nick-avatar.png" alt="Nick" width={56} height={56} />
                 </div>
                 <div>
-                  <div className="nick-name-label">Nick</div>
+                  <div className="nick-name-label">✦ Nick.ai</div>
                   {turn.loading ? (
                     <div className="acknowledgement-bubble typing-indicator">
                       <span /><span /><span />

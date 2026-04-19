@@ -14,43 +14,52 @@ After all answers, ask one brief follow-up about timing — whether they're read
 
 After the follow-up answer, say exactly: "On it. Give me a moment." — then stop.`;
 
-export const QUERY_GENERATION_PROMPT = `Based on these buyer answers, generate 2-3 specific Serper search queries to find matching Melbourne residential properties currently for sale on Domain or realestate.com.au.
+export const QUERY_GENERATION_PROMPT = `Based on these buyer answers, generate 2-3 Serper search queries to find matching Melbourne residential properties for sale on Domain.
 
 Buyer answers:
 {{ANSWERS}}
 
-Return a JSON array of strings. Example: ["2 bedroom house Fitzroy under 900000 site:domain.com.au", "terrace Carlton 2br for sale 2024"]
+Query format MUST be exactly: "site:domain.com.au/[N] [suburb] bedroom for sale"
+Where [N] is the bedroom count (integer, e.g. 2, 3, 4) and [suburb] is the suburb name.
 
-Focus on: suburbs mentioned or implied, property type, bedroom count, price range. Be specific. Target Domain.com.au and realestate.com.au.
+Rules:
+- Extract the bedroom count from must-haves, or default to 3 if unspecified
+- Use different suburb variations across queries if the buyer mentioned multiple areas
+- Keep each query to this exact format — no extra words, no price ranges, no property type
 
-Return only the JSON array, nothing else.`;
+Example output for a buyer wanting 3br in Fitzroy or Collingwood:
+["site:domain.com.au/3 Fitzroy bedroom for sale", "site:domain.com.au/3 Collingwood bedroom for sale", "site:domain.com.au/2 Fitzroy bedroom for sale"]
 
-export const ANALYSE_PROPERTIES_PROMPT = `You are Nick — Melbourne buyer's advocate. A buyer has answered questions about what they need. You have Serper search results showing real properties for sale.
+Return only a JSON array of strings, nothing else.`;
+
+export const ANALYSE_PROPERTIES_PROMPT = `You are Nick — Melbourne buyer's advocate. A buyer has answered questions about what they need. You have real Domain.com.au property listings pre-parsed from search results.
 
 Buyer profile:
 {{ANSWERS}}
 
-Serper results:
+Real listings found:
 {{SERPER_RESULTS}}
 
-Your job: pick the 3 best matching properties from the results. For each, provide honest insider intelligence — the kind of thing a buyer's advocate would tell you over coffee, not what a selling agent would say.
+Each listing shows: Address, Suburb, Bedrooms, Price (from snippet), Source URL, Image URL.
+
+Your job: pick the 3 best matching properties from these listings. Use the address, suburb, bedrooms, sourceUrl, and imageUrl exactly as provided — do not invent or alter them. Fill in bathrooms, type, quotedPrice, trueRange, matchReason, nicksBrief, and signals from your Melbourne market knowledge.
 
 Return a JSON object with this exact structure:
 {
   "intro": "2-3 sentences in Nick's voice. Direct, warm, no filler. Acknowledge what you heard and what you found.",
   "properties": [
     {
-      "address": "full street address",
-      "suburb": "suburb name",
+      "address": "use exact address from listing data",
+      "suburb": "use exact suburb from listing data",
       "type": "house | apartment | townhouse | unit",
       "bedrooms": number,
       "bathrooms": number,
-      "quotedPrice": "e.g. $850,000–$920,000 or $895,000",
-      "trueRange": "Nick's honest estimate of where this will land",
+      "quotedPrice": "price from the listing snippet, or estimate if not clear",
+      "trueRange": "Nick's honest estimate of where this will land at auction",
       "matchReason": "one short phrase explaining why this fits this buyer",
       "nicksBrief": "2-3 sentences of honest insider take. What's good. What to watch. What the agent won't tell you.",
-      "sourceUrl": "the listing URL from search results, or empty string if not available",
-      "imageUrl": "a direct image URL from search results if available, or empty string",
+      "sourceUrl": "use exact sourceUrl from listing data",
+      "imageUrl": "use exact imageUrl from listing data, or empty string",
       "signals": [
         { "label": "signal description", "value": "concise value or note", "type": "good | warn | gold" },
         { "label": "signal description", "value": "concise value or note", "type": "good | warn | gold" },
@@ -62,7 +71,7 @@ Return a JSON object with this exact structure:
 
 Signal types: good = positive, warn = caution, gold = standout opportunity or insight.
 
-If search results don't contain clear property listings, use the buyer's profile to describe 3 realistic example properties that would match — make clear they are illustrative.
+If fewer than 3 listings were found, fill remaining slots with realistic illustrative properties that match the buyer's profile — clearly noted in nicksBrief as "illustrative example".
 
 Return only the JSON object, nothing else.`;
 

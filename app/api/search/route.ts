@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
-import { searchProperties } from '@/lib/serper';
+import {
+  searchProperties,
+  searchPropertyImage,
+  parseListingTitle,
+  parseBedroomsFromSnippet,
+  type ParsedListing,
+} from '@/lib/serper';
 import { QUERY_GENERATION_PROMPT, ANALYSE_PROPERTIES_PROMPT } from '@/lib/prompts';
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
@@ -23,7 +29,7 @@ export async function POST(req: NextRequest) {
       `Lifestyle & timing: ${lifestyle}`,
     ].join('\n');
 
-    // Step 1: Generate search queries
+    // Step 1: Generate search queries in the confirmed working format
     let queries: string[] = [];
     try {
       const queryPrompt = QUERY_GENERATION_PROMPT.replace('{{ANSWERS}}', answersText);
@@ -34,36 +40,70 @@ export async function POST(req: NextRequest) {
       });
 
       const queryText = queryResponse.content[0].type === 'text' ? queryResponse.content[0].text : '';
-      queries = JSON.parse(queryText.trim());
+      const parsed = JSON.parse(queryText.trim());
+      queries = Array.isArray(parsed) ? parsed : [];
     } catch {
-      queries = [`${location} property for sale Melbourne site:domain.com.au`];
+      // Fallback: build a simple query from location
+      const suburb = location.split(/[,\s]/)[0];
+      queries = [`site:domain.com.au/3 ${suburb} bedroom for sale`];
     }
 
-    // Step 2: Fetch Serper results
-    let serperResultsText = 'No search results available.';
-    console.log('[Search API] SERPER_API_KEY present:', !!process.env.SERPER_API_KEY);
     console.log('[Search API] Generated queries:', queries);
-    try {
-      if (process.env.SERPER_API_KEY) {
+
+    // Step 2: Fetch Serper results and parse into structured listings
+    const parsedListings: ParsedListing[] = [];
+
+    if (process.env.SERPER_API_KEY) {
+      try {
         const serperResponse = await searchProperties(queries);
-        console.log('[Search API] Serper returned', serperResponse.organic.length, 'total results');
-        if (serperResponse.organic.length > 0) {
-          const top = serperResponse.organic.slice(0, 15);
-          console.log('[Search API] Top results:', top.map(r => ({ title: r.title, link: r.link, hasImage: !!r.imageUrl })));
-          serperResultsText = top
-            .map((r, i) => `[${i + 1}] ${r.title}\nURL: ${r.link}\n${r.snippet}${r.imageUrl ? `\nImage: ${r.imageUrl}` : ''}`)
-            .join('\n\n');
-        } else {
-          console.warn('[Search API] No Serper results — Claude will use illustrative properties');
+        console.log('[Search API] Serper returned', serperResponse.organic.length, 'results');
+
+        const seen = new Set<string>();
+        for (const item of serperResponse.organic.slice(0, 15)) {
+          if (!item.link.includes('domain.com.au')) continue;
+
+          const { address, suburb } = parseListingTitle(item.title);
+          if (!address || seen.has(address)) continue;
+          seen.add(address);
+
+          const bedrooms = parseBedroomsFromSnippet(item.snippet) || parseBedroomsFromSnippet(item.title);
+
+          parsedListings.push({
+            address,
+            suburb,
+            bedrooms,
+            snippet: item.snippet,
+            sourceUrl: item.link,
+            imageUrl: '',
+          });
+
+          if (parsedListings.length >= 9) break;
         }
-      } else {
-        console.warn('[Search API] SERPER_API_KEY missing — skipping Serper, Claude will use illustrative properties');
+
+        // Step 3: Fetch images for each unique property in parallel
+        await Promise.all(
+          parsedListings.map(async (listing, i) => {
+            const img = await searchPropertyImage(listing.address);
+            parsedListings[i].imageUrl = img;
+          })
+        );
+
+        console.log('[Search API] Parsed', parsedListings.length, 'listings with images');
+      } catch (err) {
+        console.error('[Search API] Serper error:', err);
       }
-    } catch (err) {
-      console.error('[Search API] Serper error:', err);
+    } else {
+      console.warn('[Search API] SERPER_API_KEY missing — Claude will use illustrative properties');
     }
 
-    // Step 3: Claude analyses and returns structured properties
+    // Format listings for Claude
+    const serperResultsText = parsedListings.length > 0
+      ? parsedListings.map((l, i) =>
+          `[${i + 1}] Address: ${l.address}\nSuburb: ${l.suburb}\nBedrooms: ${l.bedrooms || 'unknown'}\nSnippet: ${l.snippet}\nSource URL: ${l.sourceUrl}\nImage URL: ${l.imageUrl || 'none'}`
+        ).join('\n\n')
+      : 'No listings found — use illustrative properties matching the buyer profile.';
+
+    // Step 4: Claude analyses and returns structured properties
     const analysePrompt = ANALYSE_PROPERTIES_PROMPT
       .replace('{{ANSWERS}}', answersText)
       .replace('{{SERPER_RESULTS}}', serperResultsText);

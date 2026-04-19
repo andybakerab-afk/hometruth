@@ -92,7 +92,7 @@ function ResultsContent() {
             <Image src="/nick-avatar.png" alt="Nick" width={56} height={56} />
           </div>
           <div>
-            <div className="nick-name-label">Nick</div>
+            <div className="nick-name-label">✦ Nick.ai</div>
             <div className="question-bubble results-intro">{result.intro}</div>
           </div>
         </div>
