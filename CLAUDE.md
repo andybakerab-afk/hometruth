@@ -1,115 +1,149 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code when working with this repository.
 
 ## Commands
 
 ```bash
 npm run dev       # Start dev server (Next.js, hot reload)
 npm run build     # Production build
-npm run start     # Run production build locally
+npm run preview   # Build then serve production build locally
 ```
 
 No test suite is configured.
 
 ## Architecture
 
-This is a Next.js App Router demo — a mobile phone mockup UI for the Hometruth product (by Pickle, Melbourne). There is no routing (beyond Next.js), no backend, no state management library.
+Next.js App Router, TypeScript, mobile-first full-screen responsive app (no phone frame).
+
+**Styling:** CSS modules via `styles/globals.css`. All design tokens in `styles/tokens.css` as CSS custom properties. No inline styles anywhere — CSS classes only. No hardcoded colour values or font stacks in components.
 
 **File structure:**
-- `app/layout.tsx` — root layout with metadata and Google Fonts link
-- `app/page.tsx` — main page, imports `HometruthApp`
-- `components/HometruthApp.jsx` — the full app component (`'use client'`)
-- `src/theme.js` — design token palette
+- `app/layout.tsx` — root layout, Google Fonts, viewport meta with viewport-fit=cover
+- `app/page.tsx` — conversation screen, renders ConversationFlow
+- `app/results/page.tsx` — results screen, renders PropertyResults
+- `app/api/search/route.ts` — takes buyer answers, calls Serper, calls Claude, returns 3 analysed properties
+- `components/conversation/` — ConversationFlow, Question, AnswerInput
+- `components/property/` — PropertyCard, SignalBadge, GateCard
+- `components/ui/` — Button, Badge
+- `lib/prompts.ts` — SYSTEM_PROMPT, QUERY_GENERATION_PROMPT, ANALYSE_PROPERTIES_PROMPT
+- `lib/serper.ts` — Serper API client
+- `styles/globals.css` — all component styles using CSS custom properties
+- `styles/tokens.css` — all CSS custom properties for the Ironbark palette
 
-**Key patterns:**
+## Product
 
-- All inline styles are defined in a single `S` object at the top of the `Hometruth` component. The design token palette is in the `P` constant (colors, fonts, shadows), imported from `src/theme.js`. Design tokens must never be hardcoded in components — always reference `P`.
-- Two verticals: `"homes"` and `"cars"`, each with their own ordered screen list (`HOME_SCREENS` / `CAR_SCREENS`). Screen navigation is a simple integer index via `go(n)`.
-- `HomesScreen` and `CarsScreen` are inner components that switch on `screen` index with `if (screen === N)` blocks — no routing.
-- Two shared screen components reused across verticals: `GateScreen` (freemium paywall at $49) and `TransparencyScreen` (how Hometruth makes money). Both accept a `context` prop (`"homes"` | `"cars"`) to vary copy.
-- Screen transition is handled by an `entered` boolean toggled via `useEffect` + `setTimeout` on screen/vertical change, driving CSS opacity/transform.
-- Google Fonts (Playfair Display, DM Sans) are loaded inline via a `<link>` tag inside the render tree.
+**HomeTruth by Pickle** — AI-powered property buying intelligence for Melbourne.
 
-## Product Context
+Nick is a licensed real estate agent acting as buyer's advocate. No conflict of interest — he works for the buyer, not the vendor.
 
-HomeTruth by Pickle is an AI-powered property and car buying app for Australian buyers. Built for Nick (Andy's son, 28, works at BMW South Yarra, has a real estate licence).
+**The flow:**
+1. Six-question conversation learns what the buyer needs
+2. Serper API finds real Melbourne listings
+3. Claude analyses them and adds honest insider intelligence
+4. Three property cards shown free
+5. Full deep report is $49
 
-**Taglines:**
-- "Real advice. Real homes. Home truths."
-- "Nick will bring it home."
-- "Just show up for the bow."
+## The Conversation
 
-**The bow story:** The family bought an Audi and asked Nick to handle all negotiation — they just picked it up with a gift box and bow on it. That story is the heart of the Cars product.
+Six questions in order. One at a time. No skipping.
+
+1. Where are you looking — suburb, area, or describe the kind of place
+2. What's your budget — the real number they'd stretch to
+3. Who's moving in
+4. What does a typical week look like
+5. What are their hard nos
+6. Lifestyle context — ask it naturally, surfaces how they actually live (do NOT frame it as "Saturday morning")
+
+**Nick's acknowledgements between questions** (use only these, no variation):
+- "Got it."
+- "Noted."
+- "Makes sense."
+- "Good to know."
+- "Alright."
+
+After all six answers: "On it. Give me a moment." — then navigate to results.
+
+## Nick's Voice
+
+Direct, warm, expert, zero filler words. No "Great answer!" or "Absolutely!" Speaks like a trusted friend who knows the Melbourne market cold. Between questions uses only the acknowledgements above. In analysis, honest insider intelligence — the kind of thing a buyer's advocate tells you over coffee, not what a selling agent would say.
 
 ## Commercial Model
 
-- Free browsing with snapshot data.
-- $49 per report (one deep-dive, no subscription).
-- Full service on request, priced case by case.
-- Spotter fees from broker, conveyancer, building inspector, car finance, and insurance partners.
-- Modelled on a financial advisor: free consult surfaces what you don't know; paid report is the statement of advice.
-- Free answers "should I be interested?" — the report answers "should I buy this specific one and what should I pay?"
+- **Free:** 3 property cards with photo, address, price, match reason, Nick's brief, 3 signals
+- **Paid ($49):** Full report — comparable sales, true reserve estimate, auction strategy, building/pest flags, suburb deep dive, Nick's recommendation
+- One payment. One property. No subscription.
+- Spotter fees from broker, conveyancer, building inspector, car finance, and insurance partners — always disclosed.
+- A portion of every report goes to a Melbourne homeless charity.
 
-## Key Product Decisions
+## Design System — Ironbark Palette
 
-- Nick is a buyer's advocate, not a listing agent. No conflict of interest.
-- Passive income first — Nick stays at BMW in Phase 1.
-- First home buyers are a key demographic.
-- Notes field preferred over complex filter dropdowns — AI handles natural language better than structured filters.
-- The database of qualified subscribers is a long-term asset.
-- A percentage of revenue goes to a homeless charity.
+All tokens live in `styles/tokens.css` as CSS custom properties:
 
-## Design System
+| Token | Value |
+|-------|-------|
+| `--bg` | `#F7F3EE` |
+| `--surface` | `#FFFDF9` |
+| `--surface2` | `#F2ECE4` |
+| `--border` | `rgba(88,66,48,0.11)` |
+| `--text` | `#1F1A17` |
+| `--text-sub` | `#645C55` |
+| `--text-hint` | `#9B9188` |
+| `--accent` | `#C65A32` |
+| `--accent-dark` | `#A94724` |
+| `--accent-mid` | `#D47146` |
+| `--sage` | `#7F978F` |
+| `--sage-dark` | `#6E877F` |
+| `--sage-light` | `#9FB2AB` |
+| `--gold` | `#B7842C` |
+| `--ink` | `#1B1B18` |
 
-**Palette:**
-- Accent: `#C2522A`
-- Background: `#F7F3EE`
-- Surface: `#FFFFFF`
-- Surface Alt: `#F0EBE4`
-- Text: `#1C1A17`
-- Text Sub: `#6E6560`
-- Gold: `#B8832A`
+**Fonts:** Playfair Display (headings), DM Sans (body) — loaded via Google Fonts in layout.tsx.
 
-**Fonts:** Playfair Display for headings, DM Sans for body.
+Never hardcode colour values, font stacks, or shadow strings in components. Always reference CSS custom properties.
 
-All design tokens must live in `src/theme.js` only. Never hardcode colour values, font stacks, or shadow strings in components.
+## API Route Flow
 
-## Australian Context
+`POST /api/search`
 
-- Victorian stamp duty rules apply.
-- First Home Owner Grant (FHOG): $10k for new builds; stamp duty exemption under $600k.
-- ASIC disclosure requirements for referral fees — always disclose spotter fees explicitly.
-- Data residency in Australia when Supabase is added (Sydney region ap-southeast-2).
+1. Receive buyer answers (location, budget, household, weeklyLife, hardNos, lifestyle)
+2. Call Claude to generate 2–3 targeted search queries based on answers
+3. Call Serper with those queries — searches Melbourne residential properties for sale
+4. Pass Serper results + buyer answers to Claude
+5. Claude returns structured JSON: intro + 3 properties with address, suburb, type, beds, baths, quotedPrice, trueRange, matchReason, nicksBrief, sourceUrl, imageUrl, signals (3 × label/value/type)
+6. Return to frontend
 
-## Technical Environment
+Prompts live in `lib/prompts.ts`. Never put prompt text inline in route handlers.
 
-- Always use GitHub Codespaces — never local Windows git.
-- Never paste files into the GitHub web editor (adds BOM silently).
-- Vercel auto-deploys on push to main.
-- No environment variables yet — pure frontend demo.
+## Responsive Design Rules
 
-**Future stack:**
-- Supabase PostgreSQL, Sydney region, RLS from day one.
-- Two-client auth pattern: anon client for token verification, service role client for DB writes.
-- Anthropic Claude API for suburb and dealer reports.
-- Stripe for payments.
-- API keys go in Vercel dashboard only — never in code.
+- Use `100svh` not `100vh`
+- `viewport-fit=cover` in viewport meta (set via Next.js `viewport` export)
+- `env(safe-area-inset-bottom)` for bottom padding on fixed/sticky elements
+- Test mentally for iPhone SE, XR, Pro Max, and tablet
+- No fixed pixel widths except `max-width` constraints
+- Conversation and results panels use `max-width: 640px` centred
+
+## Environment
+
+- Codespaces only — never local Windows git
+- Vercel auto-deploys on push to main
+- Environment variables: `ANTHROPIC_API_KEY`, `SERPER_API_KEY` — both in Vercel dashboard only, never in code
+
+## Key Technical Decisions
+
+- No inline styles anywhere — CSS classes only
+- No hardcoded content — everything from API or props
+- Serper fetches real Melbourne listings; Claude adds intelligence layer
+- Property cards link to source listing but experience stays inside HomeTruth
+- `useSearchParams` wrapped in Suspense boundary (required by Next.js 14)
+- Buyer answers passed to results page via URL search params
+- `@/` path alias resolves to project root (configured in tsconfig.json)
 
 ## Working Principles
 
-- Security first — never expose credentials.
-- Privacy by design — minimum data collection.
-- Mobile first — optimise for iPhone.
-- Avoid hardcoding — use constants and configuration files for anything that might change, including colours, copy, pricing, and screen lists.
-- Keep code simple and readable; avoid over-engineering.
-- The founder has a terminal illness — keep work enjoyable and low stress.
-
-## Current State
-
-Pure frontend demo. All data is hardcoded. Fitzroy and BMW 3 Series are placeholder examples.
-
-**Next steps (in order):**
-1. Make the three fixes to the demo: transparency screen numbers, charity pledge, Nick's licence framing.
-2. Refactor palette to `src/theme.js` (done — P is now imported from theme.js).
-3. Add real Anthropic API calls for suburb and dealer reports.
+- Security first — never expose credentials
+- Privacy by design — minimum data collection
+- Mobile first — optimise for iPhone
+- Keep code simple and readable; avoid over-engineering
+- The founder has a terminal illness — keep work enjoyable and low stress

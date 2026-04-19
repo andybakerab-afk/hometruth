@@ -1,5 +1,5 @@
-import HometruthApp from "../components/HometruthApp";
+import { ConversationFlow } from '@/components/conversation/ConversationFlow';
 
-export default function Page() {
-  return <HometruthApp />;
+export default function HomePage() {
+  return <ConversationFlow />;
 }
