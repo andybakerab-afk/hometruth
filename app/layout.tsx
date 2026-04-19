@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import P from "../src/theme.js";
 
 export const metadata: Metadata = {
   title: "Hometruth",
@@ -15,7 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body style={{ margin: 0, padding: 0, background: "#F7F3EE" }}>
+      <body style={{ margin: 0, padding: 0, background: P.bg }}>
         {children}
       </body>
     </html>

@@ -23,7 +23,7 @@ export default function Hometruth() {
 
   const S = {
     wrap:      { minHeight:"100vh", background:P.bg, display:"flex", flexDirection:"column", alignItems:"center", padding:"24px 16px 32px", fontFamily:P.fontB },
-    phone:     { width:"360px", minHeight:"680px", background:P.surface, borderRadius:"36px", border:`0.5px solid ${P.borderStrong}`, overflow:"hidden", display:"flex", flexDirection:"column", boxShadow:"0 8px 40px rgba(0,0,0,0.10)" },
+    phone:     { width:"360px", minHeight:"680px", background:P.surface, borderRadius:"36px", border:`0.5px solid ${P.borderStrong}`, overflow:"hidden", display:"flex", flexDirection:"column", boxShadow:P.phoneShadow },
     statusBar: { display:"flex", justifyContent:"space-between", alignItems:"center", padding:"14px 22px 6px", flexShrink:0 },
     time:      { fontSize:"12px", fontWeight:"500", color:P.textHint },
     wordmark:  { fontFamily:P.fontD, fontSize:"18px", fontWeight:"400", letterSpacing:"0.1em", textTransform:"uppercase", color:P.accent },
