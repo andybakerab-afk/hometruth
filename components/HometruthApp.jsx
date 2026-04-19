@@ -37,8 +37,8 @@ export default function Hometruth() {
     em:        { fontStyle:"italic", color:P.textSub },
     sub:       { fontFamily:P.fontB, fontSize:"13px", fontWeight:"300", lineHeight:"1.6", color:P.textSub, marginBottom:"12px" },
     sp:        { flex:1 },
-    btn:       { fontFamily:P.fontB, fontSize:"14px", fontWeight:"500", padding:"13px 20px", borderRadius:"14px", border:"none", background:"linear-gradient(135deg, #C2522A 0%, #A84020 100%)", color:P.accentText, cursor:"pointer", width:"100%", marginTop:"8px", boxShadow:P.shadow, display:"flex", alignItems:"center", justifyContent:"center", gap:"6px" },
-    btnGold:   { fontFamily:P.fontB, fontSize:"14px", fontWeight:"500", padding:"13px 20px", borderRadius:"14px", border:"none", background:P.gold, color:"#FFFFFF", cursor:"pointer", width:"100%", marginTop:"8px", boxShadow:"0 2px 12px rgba(184,131,42,0.30)" },
+    btn:       { fontFamily:P.fontB, fontSize:"14px", fontWeight:"500", padding:"13px 20px", borderRadius:"14px", border:"none", background:`linear-gradient(135deg, ${P.accent} 0%, ${P.accentDark} 100%)`, color:P.accentText, cursor:"pointer", width:"100%", marginTop:"8px", boxShadow:P.shadow, display:"flex", alignItems:"center", justifyContent:"center", gap:"6px" },
+    btnGold:   { fontFamily:P.fontB, fontSize:"14px", fontWeight:"500", padding:"13px 20px", borderRadius:"14px", border:"none", background:P.gold, color:P.accentText, cursor:"pointer", width:"100%", marginTop:"8px", boxShadow:P.goldShadow },
     btnG:      { fontFamily:P.fontB, fontSize:"13px", fontWeight:"400", padding:"11px 20px", borderRadius:"14px", border:`0.5px solid ${P.border}`, background:"transparent", color:P.textSub, cursor:"pointer", width:"100%", marginTop:"6px" },
     card:      { background:P.surfaceAlt, borderRadius:"12px", padding:"11px 13px", display:"flex", alignItems:"flex-start", gap:"10px", marginBottom:"7px" },
     icon:      { width:"28px", height:"28px", borderRadius:"7px", background:P.surface, border:`0.5px solid ${P.border}`, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 },
@@ -74,10 +74,10 @@ export default function Hometruth() {
     netFee:    { fontFamily:P.fontD, fontSize:"13px", color:P.good, flexShrink:0 },
     free:      { fontFamily:P.fontB, fontSize:"11px", fontWeight:"500", padding:"3px 9px", borderRadius:"99px", background:P.warmBg, color:P.warm },
     when:      { fontFamily:P.fontB, fontSize:"11px", color:P.textHint },
-    bowHero:   { background:"linear-gradient(145deg, #1A1A17 0%, #2C2A25 100%)", borderRadius:"12px", padding:"20px 16px", marginBottom:"12px", textAlign:"center" },
+    bowHero:   { background:`linear-gradient(145deg, ${P.ink} 0%, ${P.inkAlt} 100%)`, borderRadius:"12px", padding:"20px 16px", marginBottom:"12px", textAlign:"center" },
     propCard:  { border:`0.5px solid ${P.border}`, borderRadius:"12px", overflow:"hidden", marginBottom:"9px" },
-    propImg:   { height:"110px", background:"linear-gradient(135deg, #E8D5C0 0%, #C9A882 100%)", display:"flex", alignItems:"center", justifyContent:"center" },
-    propPrice: { fontFamily:P.fontD, fontSize:"19px", fontWeight:"500", color:"#4A2E0A" },
+    propImg:   { height:"110px", background:P.propPlaceholder, display:"flex", alignItems:"center", justifyContent:"center" },
+    propPrice: { fontFamily:P.fontD, fontSize:"19px", fontWeight:"500", color:P.warmDark },
     propBody:  { padding:"11px 13px" },
     propAddr:  { fontFamily:P.fontB, fontSize:"14px", fontWeight:"500", color:P.text, marginBottom:"3px" },
     propSub:   { fontFamily:P.fontB, fontSize:"12px", color:P.textSub, marginBottom:"8px" },
@@ -414,9 +414,9 @@ export default function Hometruth() {
         <div style={S.h1}>You just show<br/>up for<br/><span style={S.em}>the bow.</span></div>
         <div style={S.bowHero}>
           <div style={{fontSize:"36px",marginBottom:"6px"}}>🎁</div>
-          <div style={{fontFamily:P.fontD,fontSize:"16px",color:"#F0EDE8",marginBottom:"4px",fontStyle:"italic"}}>"We handed it to Nick."</div>
-          <div style={{fontFamily:P.fontB,fontSize:"12px",color:"rgba(240,237,232,0.65)",lineHeight:"1.5"}}>"He did all the negotiating and communication with the dealer. We just picked it up with a gift box and a bow on it."</div>
-          <div style={{fontFamily:P.fontB,fontSize:"10px",color:"rgba(240,237,232,0.4)",marginTop:"8px",letterSpacing:"0.06em",textTransform:"uppercase"}}>A real Hometruth family</div>
+          <div style={{fontFamily:P.fontD,fontSize:"16px",color:P.onInk,marginBottom:"4px",fontStyle:"italic"}}>"We handed it to Nick."</div>
+          <div style={{fontFamily:P.fontB,fontSize:"12px",color:P.onInkSub,lineHeight:"1.5"}}>"He did all the negotiating and communication with the dealer. We just picked it up with a gift box and a bow on it."</div>
+          <div style={{fontFamily:P.fontB,fontSize:"10px",color:P.onInkHint,marginTop:"8px",letterSpacing:"0.06em",textTransform:"uppercase"}}>A real Hometruth family</div>
         </div>
         <div style={S.strip}>
           {[["Identifies the right car & dealer",<span style={S.badge("good")}>Done</span>],["Negotiates price & extras",<span style={S.badge("good")}>Done</span>],["Handles all dealer comms",<span style={S.badge("good")}>Done</span>],["Arranges finance if needed",<span style={S.badge("good")}>Done</span>],["You",<span style={S.badge("gold")}>Just pick it up</span>]].map(([l,v],i,a) => (
