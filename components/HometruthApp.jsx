@@ -33,11 +33,11 @@ export default function Hometruth() {
     vtab:      (on) => ({ flex:1, fontFamily:P.fontB, fontSize:"12px", fontWeight:"500", padding:"8px 0", textAlign:"center", border:"none", cursor:"pointer", background:on?P.accent:"transparent", color:on?P.accentText:P.textSub, transition:"all 0.2s" }),
     body:      { padding:"12px 22px 14px", flex:1, display:"flex", flexDirection:"column", opacity:entered?1:0, transform:entered?"translateY(0)":"translateY(6px)", transition:"opacity 0.3s ease, transform 0.3s ease", overflow:"hidden" },
     tag:       { fontFamily:P.fontB, fontSize:"11px", fontWeight:"500", letterSpacing:"0.12em", textTransform:"uppercase", color:P.textSub, marginBottom:"10px" },
-    h1:        { fontFamily:P.fontD, fontSize:"25px", fontWeight:"400", lineHeight:"1.25", color:P.text, marginBottom:"10px" },
+    h1:        { fontFamily:P.fontD, fontSize:"25px", fontWeight:"400", lineHeight:"1.35", color:P.text, marginBottom:"10px" },
     em:        { fontStyle:"italic", color:P.textSub },
     sub:       { fontFamily:P.fontB, fontSize:"13px", fontWeight:"300", lineHeight:"1.6", color:P.textSub, marginBottom:"12px" },
     sp:        { flex:1 },
-    btn:       { fontFamily:P.fontB, fontSize:"14px", fontWeight:"500", padding:"13px 20px", borderRadius:"14px", border:"none", background:P.accent, color:P.accentText, cursor:"pointer", width:"100%", marginTop:"8px", boxShadow:P.shadow },
+    btn:       { fontFamily:P.fontB, fontSize:"14px", fontWeight:"500", padding:"13px 20px", borderRadius:"14px", border:"none", background:"linear-gradient(135deg, #C2522A 0%, #A84020 100%)", color:P.accentText, cursor:"pointer", width:"100%", marginTop:"8px", boxShadow:P.shadow, display:"flex", alignItems:"center", justifyContent:"center", gap:"6px" },
     btnGold:   { fontFamily:P.fontB, fontSize:"14px", fontWeight:"500", padding:"13px 20px", borderRadius:"14px", border:"none", background:P.gold, color:"#FFFFFF", cursor:"pointer", width:"100%", marginTop:"8px", boxShadow:"0 2px 12px rgba(184,131,42,0.30)" },
     btnG:      { fontFamily:P.fontB, fontSize:"13px", fontWeight:"400", padding:"11px 20px", borderRadius:"14px", border:`0.5px solid ${P.border}`, background:"transparent", color:P.textSub, cursor:"pointer", width:"100%", marginTop:"6px" },
     card:      { background:P.surfaceAlt, borderRadius:"12px", padding:"11px 13px", display:"flex", alignItems:"flex-start", gap:"10px", marginBottom:"7px" },
@@ -104,6 +104,12 @@ export default function Hometruth() {
   const ArrowR = () => (
     <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
       <path d="M2 6h8M6 2l4 4-4 4" stroke={P.accentText} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+
+  const Chev = () => (
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style={{flexShrink:0}}>
+      <path d="M3 1.5l3.5 3.5L3 8.5" stroke={P.accentText} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
 
@@ -188,7 +194,7 @@ export default function Hometruth() {
       </div>
 
       <div style={S.sp}/>
-      <button style={S.btn} onClick={() => go(screen + 1)}>Got it — let's keep going</button>
+      <button style={S.btn} onClick={() => go(screen + 1)}>Got it — let's keep going <Chev/></button>
     </div>
   );
 
@@ -202,10 +208,10 @@ export default function Hometruth() {
         <div style={S.h1}>Finding a home<br/>shouldn't feel like<br/><span style={S.em}>filling out forms.</span></div>
         <div style={S.sub}>Real advice. Real market insight. Someone genuinely in your corner.</div>
         <div style={S.card}><div style={S.icon}><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2L2 6v8h4v-4h4v4h4V6L8 2z" stroke={P.textSub} strokeWidth="1" strokeLinejoin="round"/></svg></div><div><div style={S.cl}>Personalised search</div><div style={S.cd}>Not just bedrooms and price. The vibe, the street, the neighbours.</div></div></div>
-        <div style={S.card}><div style={S.icon}><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke={P.textSub} strokeWidth="1"/><path d="M8 5v3l2 2" stroke={P.textSub} strokeWidth="1" strokeLinecap="round"/></svg></div><div><div style={S.cl}>Suburb truth</div><div style={S.cd}>What agents won't tell you. What Google can't know.</div></div></div>
+        <div style={{...S.card, background:P.sageBg, borderLeft:`3px solid ${P.sage}`}}><div style={S.icon}><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke={P.sage} strokeWidth="1"/><path d="M8 5v3l2 2" stroke={P.sage} strokeWidth="1" strokeLinecap="round"/></svg></div><div><div style={{...S.cl, color:P.sage}}>Suburb truth</div><div style={S.cd}>What agents won't tell you. What Google can't know.</div></div></div>
         <div style={S.card}><div style={S.icon}><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="3" stroke={P.textSub} strokeWidth="1"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke={P.textSub} strokeWidth="1" strokeLinecap="round"/></svg></div><div><div style={S.cl}>Nick will bring it home</div><div style={S.cd}>Licensed buyer's advocate. No conflicts. Genuinely on your side.</div></div></div>
         <div style={S.sp}/>
-        <button style={S.btn} onClick={() => go(1)}>See how it works</button>
+        <button style={S.btn} onClick={() => go(1)}>See how it works <Chev/></button>
       </div>
     );
 
@@ -220,7 +226,7 @@ export default function Hometruth() {
         <div style={S.secLabel}>Budget</div>
         <div style={S.pillRow}><span style={S.pill(false)}>Under $800k</span><span style={S.pill(true)}>$800k–$1.5M</span><span style={S.pill(false)}>$1.5M+</span></div>
         <div style={S.sp}/>
-        <button style={S.btn} onClick={() => go(2)}>Show me what's out there</button>
+        <button style={S.btn} onClick={() => go(2)}>Show me what's out there <Chev/></button>
       </div>
     );
 
@@ -266,7 +272,7 @@ export default function Hometruth() {
         <div style={S.tag}>Full report · Fitzroy · Unlocked</div>
         <div style={S.propCard}>
           <div style={S.propImg}>
-            <div style={{textAlign:"center"}}><div style={{fontFamily:P.fontB,fontSize:"10px",color:"#7A5A3A",marginBottom:"4px",letterSpacing:"0.08em",textTransform:"uppercase"}}>3 bed · 2 bath · Terrace</div><div style={S.propPrice}>$1.28M – $1.42M</div><div style={{fontFamily:P.fontB,fontSize:"10px",color:"#7A5A3A",marginTop:"2px"}}>True market range · Full analysis</div></div>
+            <div style={{textAlign:"center"}}><div style={{fontFamily:P.fontB,fontSize:"10px",color:P.textSub,marginBottom:"4px",letterSpacing:"0.08em",textTransform:"uppercase"}}>3 bed · 2 bath · Terrace</div><div style={S.propPrice}>$1.28M – $1.42M</div><div style={{fontFamily:P.fontB,fontSize:"10px",color:P.textSub,marginTop:"2px"}}>True market range · Full analysis</div></div>
           </div>
           <div style={S.propBody}>
             <div style={S.propAddr}>14 Gore Street</div>
@@ -282,7 +288,7 @@ export default function Hometruth() {
           ))}
         </div>
         <div style={S.sp}/>
-        <button style={S.btn} onClick={() => go(6)}>Get Nick in your corner</button>
+        <button style={S.btn} onClick={() => go(6)}>Get Nick in your corner <Chev/></button>
       </div>
     );
 
@@ -306,7 +312,7 @@ export default function Hometruth() {
           <div style={S.them}>That's kind of the whole point.</div>
         </div>
         <div style={S.sp}/>
-        <button style={S.btn} onClick={() => go(7)}>How does Hometruth make money?</button>
+        <button style={S.btn} onClick={() => go(7)}>How does Hometruth make money? <Chev/></button>
       </div>
     );
 
@@ -326,7 +332,7 @@ export default function Hometruth() {
           ))}
         </div>
         <div style={S.sp}/>
-        <button style={S.btn} onClick={() => go(0)}>Start over</button>
+        <button style={S.btn} onClick={() => go(0)}>Start over <Chev/></button>
       </div>
     );
   };
@@ -344,7 +350,7 @@ export default function Hometruth() {
         <div style={S.card}><div style={S.icon}><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke={P.textSub} strokeWidth="1"/><path d="M8 5v3l2 2" stroke={P.textSub} strokeWidth="1" strokeLinecap="round"/></svg></div><div><div style={S.cl}>Ask Hometruth</div><div style={S.cd}>Is now a good time to buy? What should I actually pay?</div></div></div>
         <div style={S.card}><div style={S.icon}><span style={{fontSize:"13px"}}>🎁</span></div><div><div style={S.cl}>Just show up for the bow</div><div style={S.cd}>Nick handles everything. You pick it up with a gift box on it.</div></div></div>
         <div style={S.sp}/>
-        <button style={S.btn} onClick={() => go(1)}>See how it works</button>
+        <button style={S.btn} onClick={() => go(1)}>See how it works <Chev/></button>
       </div>
     );
 
@@ -361,7 +367,7 @@ export default function Hometruth() {
         <div style={S.secLabel}>Timing</div>
         <div style={S.pillRow}><span style={S.pill(false)}>This month</span><span style={S.pill(true)}>Next 3 months</span><span style={S.pill(false)}>Just exploring</span></div>
         <div style={S.sp}/>
-        <button style={S.btn} onClick={() => go(2)}>Show me what dealers won't</button>
+        <button style={S.btn} onClick={() => go(2)}>Show me what dealers won't <Chev/></button>
       </div>
     );
 
@@ -418,7 +424,7 @@ export default function Hometruth() {
           ))}
         </div>
         <div style={S.sp}/>
-        <button style={S.btn} onClick={() => go(6)}>How does Hometruth make money?</button>
+        <button style={S.btn} onClick={() => go(6)}>How does Hometruth make money? <Chev/></button>
       </div>
     );
 
@@ -438,7 +444,7 @@ export default function Hometruth() {
           ))}
         </div>
         <div style={S.sp}/>
-        <button style={S.btn} onClick={() => go(0)}>Start over</button>
+        <button style={S.btn} onClick={() => go(0)}>Start over <Chev/></button>
       </div>
     );
   };
