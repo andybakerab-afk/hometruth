@@ -8,8 +8,8 @@ const CAR_SCREENS  = ["Hero","What You Want","Dealer Truth","Ask Hometruth","Get
 
 export default function Hometruth() {
   const [vertical, setVertical] = useState("homes");
-  const [screen, setScreen] = useState(0);
-  const [entered, setEntered] = useState(false);
+  const [screen, setScreen]     = useState(0);
+  const [entered, setEntered]   = useState(false);
   const screens = vertical === "homes" ? HOME_SCREENS : CAR_SCREENS;
 
   useEffect(() => {
@@ -23,67 +23,63 @@ export default function Hometruth() {
 
   const S = {
     wrap:      { minHeight:"100vh", padding:"0 16px 32px", fontFamily:P.fontB, display:"flex", flexDirection:"column", alignItems:"center" },
-    statusBar: { display:"flex", justifyContent:"space-between", alignItems:"center", padding:"14px 22px 6px", flexShrink:0 },
-    time:      { fontSize:"12px", fontWeight:"500", color:P.textHint },
-    wordmark:  { fontFamily:P.fontD, fontSize:"18px", fontWeight:"400", letterSpacing:"0.1em", textTransform:"uppercase", color:P.accent },
-    dots:      { display:"flex", gap:"3px" },
-    dot:       { width:"5px", height:"5px", borderRadius:"50%", background:P.textHint, opacity:0.5 },
-    h1:        { fontFamily:P.fontD, fontSize:"25px", fontWeight:"400", lineHeight:"1.35", color:P.text, marginBottom:"10px" },
-    em:        { fontStyle:"italic", color:P.textSub },
+    h1:        { fontFamily:P.fontD, fontSize:"1.85rem", fontWeight:"600", lineHeight:"1.15", letterSpacing:"-.025em", color:P.text, marginBottom:"8px", textShadow:"0 1px 0 rgba(255,255,255,.55)" },
+    em:        { fontStyle:"italic", color:"#9d8170", fontWeight:"500" },
     sub:       { fontFamily:P.fontB, fontSize:"13px", fontWeight:"300", lineHeight:"1.6", color:P.textSub, marginBottom:"12px" },
     sp:        { flex:1 },
-    card:      { background:P.surfaceAlt, borderRadius:"12px", padding:"11px 13px", display:"flex", alignItems:"flex-start", gap:"10px", marginBottom:"7px" },
-    secLabel:  { fontFamily:P.fontB, fontSize:"10px", fontWeight:"500", letterSpacing:"0.1em", textTransform:"uppercase", color:P.textSub, marginBottom:"7px" },
+    secLabel:  { fontFamily:P.fontB, fontSize:"10px", fontWeight:"600", letterSpacing:"0.10em", textTransform:"uppercase", color:P.textHint, marginBottom:"7px" },
     pillRow:   { display:"flex", gap:"6px", flexWrap:"wrap", marginBottom:"12px" },
-    pill:      (on) => ({ fontFamily:P.fontB, fontSize:"12px", padding:"5px 12px", borderRadius:"99px", border:`0.5px solid ${on?P.accent:P.border}`, background:on?P.accent:"transparent", color:on?P.accentText:P.textSub, cursor:"pointer" }),
-    rl:        { fontFamily:P.fontB, fontSize:"13px", color:P.text },
+    pill:      (on) => ({ fontFamily:P.fontB, fontSize:"12px", padding:"5px 13px", borderRadius:"99px", border:`1px solid ${on?P.accent:"rgba(88,66,48,0.14)"}`, background:on?`linear-gradient(135deg,${P.accentDark},${P.accent})`:"rgba(255,255,255,.6)", color:on?P.accentText:P.textSub, cursor:"pointer", fontWeight:on?"500":"400", boxShadow:on?"0 3px 8px rgba(180,72,38,0.20)":"none" }),
+    rl:        { fontFamily:P.fontB, fontSize:"13px", color:P.text, fontWeight:"400" },
     rv:        { fontFamily:P.fontB, fontSize:"12px", fontWeight:"500", color:P.textSub },
-    avatarRow: { display:"flex", alignItems:"center", gap:"12px", marginBottom:"12px", padding:"11px 13px", background:P.surfaceAlt, borderRadius:"12px" },
-    avatar:    { width:"44px", height:"44px", borderRadius:"50%", background:P.accentSoft, border:`0.5px solid ${P.border}`, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:P.fontD, fontSize:"17px", color:P.accent, flexShrink:0 },
+    avatarRow: { display:"flex", alignItems:"center", gap:"12px", marginBottom:"12px", padding:"14px 16px", background:"radial-gradient(140% 120% at 0% 0%, rgba(255,255,255,.72) 0%, rgba(255,255,255,0) 45%), linear-gradient(180deg, #fffdfb 0%, #faf6f1 100%)", borderRadius:"20px", border:"1px solid rgba(98,76,58,.11)", boxShadow:"0 8px 22px rgba(74,52,35,.08), inset 0 1px 0 rgba(255,255,255,.65)" },
+    avatar:    { width:"44px", height:"44px", borderRadius:"50%", background:`linear-gradient(135deg,${P.accentSoft},#eeddd3)`, border:`1px solid rgba(198,90,50,0.18)`, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:P.fontD, fontSize:"17px", color:P.accent, flexShrink:0, boxShadow:"0 2px 8px rgba(198,90,50,0.14)" },
     an:        { fontFamily:P.fontD, fontSize:"15px", color:P.text },
     at:        { fontFamily:P.fontB, fontSize:"12px", fontWeight:"300", color:P.textSub },
-    quote:     { marginBottom:"12px", padding:"12px 13px 12px 15px", borderLeft:`2px solid ${P.accent}` },
-    qt:        { fontFamily:P.fontD, fontSize:"14px", fontStyle:"italic", lineHeight:"1.55", color:P.text, marginBottom:"5px" },
+    quote:     { marginBottom:"12px", padding:"12px 14px 12px 16px", borderLeft:`3px solid ${P.accent}`, background:"linear-gradient(90deg,rgba(198,90,50,0.05) 0%,transparent 100%)", borderRadius:"0 12px 12px 0", border:"1px solid rgba(198,90,50,0.10)", borderLeft:`3px solid ${P.accent}` },
+    qt:        { fontFamily:P.fontD, fontSize:"14px", fontStyle:"italic", lineHeight:"1.6", color:P.text, marginBottom:"5px" },
     qa:        { fontFamily:P.fontB, fontSize:"10px", color:P.textHint, letterSpacing:"0.06em", textTransform:"uppercase" },
-    chatName:  { fontFamily:P.fontB, fontSize:"10px", fontWeight:"500", letterSpacing:"0.07em", textTransform:"uppercase", color:P.textHint, marginBottom:"4px" },
-    them:      { background:P.surfaceAlt, color:P.text, borderRadius:"12px", borderBottomLeftRadius:"4px", padding:"9px 12px", fontFamily:P.fontB, fontSize:"13px", lineHeight:"1.5", maxWidth:"85%", marginBottom:"7px", alignSelf:"flex-start" },
-    me:        { background:P.accent, color:P.accentText, borderRadius:"12px", borderBottomRightRadius:"4px", padding:"9px 12px", fontFamily:P.fontB, fontSize:"13px", lineHeight:"1.5", maxWidth:"85%", marginBottom:"7px", alignSelf:"flex-end" },
-    inputRow:  { display:"flex", gap:"8px", alignItems:"center", padding:"9px 13px", border:`0.5px solid ${P.border}`, borderRadius:"12px", marginBottom:"8px" },
+    chatName:  { fontFamily:P.fontB, fontSize:"10px", fontWeight:"600", letterSpacing:"0.08em", textTransform:"uppercase", color:P.textHint, marginBottom:"5px" },
+    them:      { background:"linear-gradient(160deg,#f8f3ec 0%,#f2ece3 100%)", color:P.text, borderRadius:"14px", borderBottomLeftRadius:"4px", padding:"10px 13px", fontFamily:P.fontB, fontSize:"13px", lineHeight:"1.55", maxWidth:"85%", marginBottom:"8px", alignSelf:"flex-start", border:"1px solid rgba(98,76,58,.08)", boxShadow:"0 1px 4px rgba(50,35,22,0.06)" },
+    me:        { background:`linear-gradient(135deg,${P.accentDark} 0%,${P.accent} 100%)`, color:P.accentText, borderRadius:"14px", borderBottomRightRadius:"4px", padding:"10px 13px", fontFamily:P.fontB, fontSize:"13px", lineHeight:"1.55", maxWidth:"85%", marginBottom:"8px", alignSelf:"flex-end", boxShadow:"0 3px 10px rgba(180,72,38,0.22)" },
+    inputRow:  { display:"flex", gap:"8px", alignItems:"center", padding:"10px 13px", border:"1px solid rgba(98,76,58,.12)", borderRadius:"14px", marginBottom:"8px", background:"linear-gradient(160deg,#fffdfb 0%,#faf5ee 100%)" },
     inputTxt:  { fontFamily:P.fontB, fontSize:"13px", color:P.textHint, flex:1 },
-    sendBtn:   { width:"26px", height:"26px", borderRadius:"50%", background:P.accent, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 },
-    askBubble: { background:P.surfaceAlt, borderRadius:"12px", borderBottomLeftRadius:"4px", padding:"11px 13px", marginBottom:"10px" },
-    askA:      { fontFamily:P.fontB, fontSize:"13px", fontWeight:"300", lineHeight:"1.6", color:P.textSub },
-    netCard:   { display:"flex", alignItems:"center", gap:"10px", padding:"9px 11px", border:`0.5px solid ${P.border}`, borderRadius:"11px", marginBottom:"7px" },
-    netIcon:   (bg) => ({ width:"34px", height:"34px", borderRadius:"8px", background:bg, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, fontSize:"15px" }),
+    sendBtn:   { width:"28px", height:"28px", borderRadius:"50%", background:`linear-gradient(135deg,${P.accentDark},${P.accent})`, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, boxShadow:"0 2px 8px rgba(180,72,38,0.28)" },
+    askBubble: { background:"linear-gradient(160deg,#f8f3ec 0%,#f2ece3 100%)", borderRadius:"14px", borderBottomLeftRadius:"4px", padding:"12px 14px", marginBottom:"10px", border:"1px solid rgba(98,76,58,.08)", boxShadow:"0 2px 8px rgba(50,35,22,.05)" },
+    askA:      { fontFamily:P.fontB, fontSize:"13px", fontWeight:"300", lineHeight:"1.65", color:P.textSub },
+    netCard:   { display:"flex", alignItems:"center", gap:"10px", padding:"10px 12px", border:"1px solid rgba(98,76,58,.09)", borderRadius:"14px", marginBottom:"7px", background:"linear-gradient(160deg,#fffdfb 0%,#faf5ee 100%)", boxShadow:"0 2px 8px rgba(50,35,22,.05)" },
+    netIcon:   (bg) => ({ width:"34px", height:"34px", borderRadius:"10px", background:bg, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, fontSize:"15px" }),
     netLabel:  { fontFamily:P.fontB, fontSize:"13px", fontWeight:"500", color:P.text },
     netDesc:   { fontFamily:P.fontB, fontSize:"11px", fontWeight:"300", color:P.textSub },
     netFee:    { fontFamily:P.fontD, fontSize:"13px", color:P.good, flexShrink:0 },
-    free:      { fontFamily:P.fontB, fontSize:"11px", fontWeight:"500", padding:"3px 9px", borderRadius:"99px", background:P.warmBg, color:P.warm },
+    free:      { fontFamily:P.fontB, fontSize:"11px", fontWeight:"600", padding:"3px 10px", borderRadius:"99px", background:P.warmBg, color:P.warm },
     when:      { fontFamily:P.fontB, fontSize:"11px", color:P.textHint },
-    bowHero:   { background:`linear-gradient(145deg, ${P.ink} 0%, ${P.inkAlt} 100%)`, borderRadius:"12px", padding:"20px 16px", marginBottom:"12px", textAlign:"center" },
-    propCard:  { border:`0.5px solid ${P.border}`, borderRadius:"12px", overflow:"hidden", marginBottom:"9px" },
+    bowHero:   { background:`linear-gradient(150deg,#111110 0%,${P.ink} 40%,${P.inkAlt} 100%)`, borderRadius:"20px", padding:"22px 18px", marginBottom:"12px", textAlign:"center", boxShadow:"0 12px 32px rgba(10,10,8,0.35), inset 0 1px 0 rgba(255,255,255,.06)" },
+    propCard:  { border:"1px solid rgba(98,76,58,.10)", borderRadius:"20px", overflow:"hidden", marginBottom:"9px", boxShadow:"0 8px 22px rgba(74,52,35,.08), inset 0 1px 0 rgba(255,255,255,.65)" },
     propImg:   { height:"110px", background:P.propPlaceholder, display:"flex", alignItems:"center", justifyContent:"center" },
     propPrice: { fontFamily:P.fontD, fontSize:"19px", fontWeight:"500", color:P.warmDark },
-    propBody:  { padding:"11px 13px" },
-    propAddr:  { fontFamily:P.fontB, fontSize:"14px", fontWeight:"500", color:P.text, marginBottom:"3px" },
+    propBody:  { padding:"12px 14px" },
+    propAddr:  { fontFamily:P.fontB, fontSize:"14px", fontWeight:"600", color:P.text, marginBottom:"3px" },
     propSub:   { fontFamily:P.fontB, fontSize:"12px", color:P.textSub, marginBottom:"8px" },
     propTags:  { display:"flex", gap:"5px", flexWrap:"wrap", marginBottom:"8px" },
-    propTag:   { fontFamily:P.fontB, fontSize:"11px", padding:"3px 9px", borderRadius:"99px", background:P.surfaceAlt, color:P.textSub },
-    matchPct:  { fontFamily:P.fontD, fontSize:"17px", color:P.good, fontWeight:"400" },
-    matchBar:  { height:"4px", background:P.surfaceAlt, borderRadius:"2px", marginTop:"3px" },
-    matchFill: { height:"4px", background:P.good, borderRadius:"2px", width:"91%" },
-    gateCard:  { background:P.surfaceAlt, borderRadius:"16px", padding:"20px 18px", marginBottom:"12px", border:`0.5px solid ${P.border}` },
-    gatePrice: { fontFamily:P.fontD, fontSize:"38px", fontWeight:"400", color:P.accent, lineHeight:"1" },
+    propTag:   { fontFamily:P.fontB, fontSize:"11px", padding:"3px 9px", borderRadius:"99px", background:"linear-gradient(180deg,#fffdfb,#f5f0e8)", color:P.textSub, border:"1px solid rgba(98,76,58,.09)" },
+    matchPct:  { fontFamily:P.fontD, fontSize:"18px", color:P.good, fontWeight:"400" },
+    matchBar:  { height:"4px", background:"rgba(88,66,48,0.08)", borderRadius:"2px", marginTop:"4px" },
+    matchFill: { height:"4px", background:`linear-gradient(90deg,${P.good},#4a9448)`, borderRadius:"2px", width:"91%" },
+    gateCard:  { background:"radial-gradient(140% 120% at 0% 0%, rgba(255,255,255,.72) 0%, rgba(255,255,255,0) 45%), linear-gradient(180deg, #fffdfb 0%, #faf6f1 100%)", borderRadius:"20px", padding:"20px 18px", marginBottom:"12px", border:"1px solid rgba(98,76,58,.11)", boxShadow:"0 8px 22px rgba(74,52,35,.08), inset 0 1px 0 rgba(255,255,255,.65)" },
+    gatePrice: { fontFamily:P.fontD, fontSize:"40px", fontWeight:"400", color:P.accent, lineHeight:"1" },
     gateSub:   { fontFamily:P.fontB, fontSize:"12px", color:P.textSub, marginTop:"4px", marginBottom:"16px" },
-    gateRow:   { display:"flex", alignItems:"center", gap:"8px", marginBottom:"8px" },
-    gateCheck: { width:"18px", height:"18px", borderRadius:"50%", background:P.goodBg, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 },
-    gateItem:  { fontFamily:P.fontB, fontSize:"13px", color:P.text },
-    lockBadge: { display:"inline-flex", alignItems:"center", gap:"5px", background:P.warnBg, borderRadius:"99px", padding:"4px 10px", fontFamily:P.fontB, fontSize:"11px", fontWeight:"500", color:P.warn, marginBottom:"12px" },
-    transRow:  { display:"flex", alignItems:"flex-start", gap:"10px", padding:"10px 13px", borderBottom:`0.5px solid ${P.border}` },
+    gateRow:   { display:"flex", alignItems:"center", gap:"9px", marginBottom:"9px" },
+    gateCheck: { width:"18px", height:"18px", borderRadius:"50%", background:P.goodBg, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, border:"1px solid rgba(46,95,45,0.18)" },
+    gateItem:  { fontFamily:P.fontB, fontSize:"13px", color:P.text, fontWeight:"400" },
+    lockBadge: { display:"inline-flex", alignItems:"center", gap:"5px", background:P.warnBg, borderRadius:"99px", padding:"4px 11px", fontFamily:P.fontB, fontSize:"11px", fontWeight:"600", color:P.warn, marginBottom:"12px", border:"1px solid rgba(139,42,42,0.14)" },
+    transRow:  { display:"flex", alignItems:"flex-start", gap:"10px", padding:"12px 14px", borderBottom:"1px solid rgba(98,76,58,.07)", background:"inherit" },
     transIcon: { fontSize:"18px", flexShrink:0, marginTop:"1px" },
-    transLabel:{ fontFamily:P.fontB, fontSize:"13px", fontWeight:"500", color:P.text, marginBottom:"2px" },
-    transDesc: { fontFamily:P.fontB, fontSize:"12px", fontWeight:"300", color:P.textSub, lineHeight:"1.45" },
+    transLabel:{ fontFamily:P.fontB, fontSize:"13px", fontWeight:"600", color:P.text, marginBottom:"2px" },
+    transDesc: { fontFamily:P.fontB, fontSize:"12px", fontWeight:"300", color:P.textSub, lineHeight:"1.5" },
     transFee:  { fontFamily:P.fontD, fontSize:"13px", color:P.gold, flexShrink:0, marginLeft:"auto", paddingLeft:"8px" },
+    warnBox:   { background:P.warnBg, borderRadius:"14px", padding:"11px 13px", display:"flex", alignItems:"flex-start", gap:"10px", marginBottom:"8px", border:`1px solid rgba(139,42,42,0.10)` },
+    navBtn:    (visible) => ({ width:"36px", height:"36px", borderRadius:"50%", border:`0.5px solid ${visible?"rgba(98,76,58,.14)":"transparent"}`, background:"transparent", cursor:visible?"pointer":"default", display:"flex", alignItems:"center", justifyContent:"center", opacity:visible?1:0, transition:"opacity 0.2s", flexShrink:0 }),
   };
 
   const ArrowR = () => (
@@ -107,8 +103,8 @@ export default function Hometruth() {
   // ── SHARED: Freemium Gate ────────────────────────────────────────────────
   const GateScreen = ({ context }) => (
     <div style={{display:"flex",flexDirection:"column",flex:1}}>
-      <div className="eyebrow">{context === "homes" ? "Full suburb report" : "Full dealer report"}</div>
-      <div style={S.h1}>You've found<br/>something worth<br/><span style={S.em}>knowing everything about.</span></div>
+      <p className="eyebrow">{context === "homes" ? "Full suburb report" : "Full dealer report"}</p>
+      <div style={S.h1}>You've found something worth<br/><span style={S.em}>knowing everything about.</span></div>
 
       <div style={S.lockBadge}>
         <svg width="10" height="11" viewBox="0 0 10 11" fill="none"><rect x="1" y="5" width="8" height="6" rx="1.5" stroke={P.warn} strokeWidth="1.2"/><path d="M3 5V3.5a2 2 0 1 1 4 0V5" stroke={P.warn} strokeWidth="1.2" strokeLinecap="round"/></svg>
@@ -145,8 +141,8 @@ export default function Hometruth() {
   // ── SHARED: How We Work (Transparency) ──────────────────────────────────
   const TransparencyScreen = ({ context }) => (
     <div style={{display:"flex",flexDirection:"column",flex:1}}>
-      <div className="eyebrow">How we work</div>
-      <div style={S.h1}>Here's exactly<br/>how Hometruth<br/><span style={S.em}>makes money.</span></div>
+      <p className="eyebrow">How we work</p>
+      <div style={S.h1}>Here's exactly how Hometruth<br/><span style={S.em}>makes money.</span></div>
       <div style={{...S.sub, marginBottom:"10px"}}>We think you should know. Most referral businesses bury this. We put it on the front page.</div>
 
       <div style={S.secLabel}>What we earn</div>
@@ -187,46 +183,49 @@ export default function Hometruth() {
   const HomesScreen = () => {
 
     if (screen === 0) return (
-      <div style={{display:"flex",flexDirection:"column",flex:1}}>
-        <div className="eyebrow">by Pickle · Melbourne</div>
-        <div style={S.h1}>Finding a home<br/>shouldn't feel like<br/><span style={S.em}>filling out forms.</span></div>
-        <div style={S.sub}>Real advice. Real market insight. Someone genuinely in your corner.</div>
-        <div className="feature-card">
-          <div className="feature-card__icon">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2L2 6v8h4v-4h4v4h4V6L8 2z" stroke={P.textSub} strokeWidth="1" strokeLinejoin="round"/></svg>
+      <div>
+        <p className="eyebrow">BY PICKLE · MELBOURNE</p>
+        <h1 className="hero-title">
+          Finding a home shouldn't feel like
+          <em>filling out forms.</em>
+        </h1>
+        <p className="hero-copy">
+          Real advice. Real market insight. Someone genuinely in your corner.
+        </p>
+        <div className="features">
+          <div className="card">
+            <div className="icon">🏠</div>
+            <div>
+              <h3>Personalised search</h3>
+              <p>Not just bedrooms and price. The vibe, the street, the neighbours.</p>
+            </div>
           </div>
-          <div>
-            <div className="feature-card__title">Personalised search</div>
-            <div className="feature-card__text">Not just bedrooms and price. The vibe, the street, the neighbours.</div>
+          <div className="card highlight">
+            <div className="icon">◔</div>
+            <div>
+              <h3>Suburb truth</h3>
+              <p>What agents won't tell you. What Google can't know.</p>
+            </div>
+          </div>
+          <div className="card">
+            <div className="icon">👤</div>
+            <div>
+              <h3>Nick will bring it home</h3>
+              <p>Licensed buyer's advocate. No conflicts. Genuinely on your side.</p>
+            </div>
           </div>
         </div>
-        <div className="feature-card feature-card--highlight">
-          <div className="feature-card__icon">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke={P.accentText} strokeWidth="1"/><path d="M8 5v3l2 2" stroke={P.accentText} strokeWidth="1" strokeLinecap="round"/></svg>
-          </div>
-          <div>
-            <div className="feature-card__title">Suburb truth</div>
-            <div className="feature-card__text">What agents won't tell you. What Google can't know.</div>
-          </div>
+        <button className="cta" onClick={() => go(1)}>See how it works →</button>
+        <div className="dots">
+          {screens.map((_,i) => <div key={i} onClick={() => go(i)} className={`dot${i===screen?" active":""}`}/>)}
         </div>
-        <div className="feature-card">
-          <div className="feature-card__icon">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="3" stroke={P.textSub} strokeWidth="1"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke={P.textSub} strokeWidth="1" strokeLinecap="round"/></svg>
-          </div>
-          <div>
-            <div className="feature-card__title">Nick will bring it home</div>
-            <div className="feature-card__text">Licensed buyer's advocate. No conflicts. Genuinely on your side.</div>
-          </div>
-        </div>
-        <div style={S.sp}/>
-        <button className="btn btn-primary" onClick={() => go(1)}>See how it works <Chev/></button>
       </div>
     );
 
     if (screen === 1) return (
       <div style={{display:"flex",flexDirection:"column",flex:1}}>
-        <div className="eyebrow">Step 1 · Personalise</div>
-        <div style={S.h1}>Tell us what<br/><span style={S.em}>home</span> means<br/>to you.</div>
+        <p className="eyebrow">Step 1 · Personalise</p>
+        <div style={S.h1}>Tell us what <span style={S.em}>home</span> means to you.</div>
         <div style={S.secLabel}>I'm looking to</div>
         <div style={S.pillRow}><span style={S.pill(true)}>Buy</span><span style={S.pill(false)}>Sell</span><span style={S.pill(false)}>Invest</span></div>
         <div style={S.secLabel}>What matters most</div>
@@ -240,8 +239,8 @@ export default function Hometruth() {
 
     if (screen === 2) return (
       <div style={{display:"flex",flexDirection:"column",flex:1}}>
-        <div className="eyebrow">Suburb snapshot · Fitzroy · Free</div>
-        <div style={S.h1}>A taste of what<br/>agents don't put<br/><span style={S.em}>in the brochure.</span></div>
+        <p className="eyebrow">Suburb snapshot · Fitzroy · Free</p>
+        <div style={S.h1}>A taste of what agents don't put <span style={S.em}>in the brochure.</span></div>
         <div className="report-card">
           {[
             ["Median house price",<span style={S.rv}>$1.42M</span>],
@@ -253,7 +252,7 @@ export default function Hometruth() {
             <div key={i} className="report-row"><span style={S.rl}>{l}</span>{v}</div>
           ))}
         </div>
-        <div style={{...S.card, background:P.warnBg, border:`0.5px solid ${P.warnBg}`}}>
+        <div style={S.warnBox}>
           <div style={{fontFamily:P.fontB, fontSize:"12px", color:P.warn, lineHeight:"1.5"}}>
             🔒 <strong>The full report</strong> includes street-by-street breakdown, true reserve estimate, comparable sales, and Nick's specific auction strategy. <strong>$49 one-off.</strong>
           </div>
@@ -266,8 +265,8 @@ export default function Hometruth() {
 
     if (screen === 3) return (
       <div style={{display:"flex",flexDirection:"column",flex:1}}>
-        <div className="eyebrow">Ask Hometruth · Free</div>
-        <div style={S.h1}>Honest answers.<br/><span style={S.em}>Not what you<br/>want to hear.</span></div>
+        <p className="eyebrow">Ask Hometruth · Free</p>
+        <div style={S.h1}>Honest answers. <span style={S.em}>Not what you want to hear.</span></div>
         <div style={S.chatName}>You</div>
         <div style={{...S.me,marginBottom:"9px"}}>Is Fitzroy worth $1.4M or am I getting played?</div>
         <div style={S.askBubble}>
@@ -283,7 +282,7 @@ export default function Hometruth() {
 
     if (screen === 5) return (
       <div style={{display:"flex",flexDirection:"column",flex:1}}>
-        <div className="eyebrow">Full report · Fitzroy · Unlocked</div>
+        <p className="eyebrow">Full report · Fitzroy · Unlocked</p>
         <div style={S.propCard}>
           <div style={S.propImg}>
             <div style={{textAlign:"center"}}><div style={{fontFamily:P.fontB,fontSize:"10px",color:P.textSub,marginBottom:"4px",letterSpacing:"0.08em",textTransform:"uppercase"}}>3 bed · 2 bath · Terrace</div><div style={S.propPrice}>$1.28M – $1.42M</div><div style={{fontFamily:P.fontB,fontSize:"10px",color:P.textSub,marginTop:"2px"}}>True market range · Full analysis</div></div>
@@ -313,8 +312,8 @@ export default function Hometruth() {
 
     if (screen === 6) return (
       <div style={{display:"flex",flexDirection:"column",flex:1}}>
-        <div className="eyebrow">Your buyer's advocate</div>
-        <div style={S.h1}>No suits.<br/>No spin.<br/><span style={S.em}>Just straight talk.</span></div>
+        <p className="eyebrow">Your buyer's advocate</p>
+        <div style={S.h1}>No suits. No spin.<br/><span style={S.em}>Just straight talk.</span></div>
         <div style={S.avatarRow}>
           <div style={S.avatar}>N</div>
           <div style={{flex:1}}><div style={S.an}>Nick</div><div style={S.at}>Licensed buyer's advocate · Melb</div></div>
@@ -339,8 +338,8 @@ export default function Hometruth() {
 
     if (screen === 8) return (
       <div style={{display:"flex",flexDirection:"column",flex:1}}>
-        <div className="eyebrow">Ready when you are</div>
-        <div style={S.h1}>This is how buying<br/>a home <span style={S.em}>should</span><br/>feel.</div>
+        <p className="eyebrow">Ready when you are</p>
+        <div style={S.h1}>This is how buying a home <span style={S.em}>should</span> feel.</div>
         <div style={S.sub}>No pressure. No jargon. Honest guidance from someone who actually gives a damn.</div>
         <div className="report-card">
           {[
@@ -365,44 +364,49 @@ export default function Hometruth() {
   const CarsScreen = () => {
 
     if (screen === 0) return (
-      <div style={{display:"flex",flexDirection:"column",flex:1}}>
-        <div className="eyebrow">by Pickle · Melbourne</div>
-        <div style={S.h1}>Buying a car<br/>shouldn't feel like<br/><span style={S.em}>a negotiation you'll lose.</span></div>
-        <div style={S.sub}>Dealers are trained negotiators. You're not. Hometruth changes that.</div>
-        <div className="feature-card">
-          <div className="feature-card__icon">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 11h12M3 11l1-4h8l1 4M5 11v2M11 11v2M6 7h4" stroke={P.textSub} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      <div>
+        <p className="eyebrow">BY PICKLE · MELBOURNE</p>
+        <h1 className="hero-title">
+          Buying a car shouldn't feel like
+          <em>a negotiation you'll lose.</em>
+        </h1>
+        <p className="hero-copy">
+          Dealers are trained negotiators. You're not. Hometruth changes that.
+        </p>
+        <div className="features">
+          <div className="card">
+            <div className="icon">🚗</div>
+            <div>
+              <h3>Dealer truth</h3>
+              <p>Real margins, end-of-quarter pressure, finance kickback intel.</p>
+            </div>
           </div>
-          <div>
-            <div className="feature-card__title">Dealer truth</div>
-            <div className="feature-card__text">Real margins, end-of-quarter pressure, finance kickback intel.</div>
+          <div className="card highlight">
+            <div className="icon">◔</div>
+            <div>
+              <h3>Ask Hometruth</h3>
+              <p>Is now a good time to buy? What should I actually pay?</p>
+            </div>
+          </div>
+          <div className="card">
+            <div className="icon">🎁</div>
+            <div>
+              <h3>Just show up for the bow</h3>
+              <p>Nick handles everything. You pick it up with a gift box on it.</p>
+            </div>
           </div>
         </div>
-        <div className="feature-card">
-          <div className="feature-card__icon">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke={P.textSub} strokeWidth="1"/><path d="M8 5v3l2 2" stroke={P.textSub} strokeWidth="1" strokeLinecap="round"/></svg>
-          </div>
-          <div>
-            <div className="feature-card__title">Ask Hometruth</div>
-            <div className="feature-card__text">Is now a good time to buy? What should I actually pay?</div>
-          </div>
+        <button className="cta" onClick={() => go(1)}>See how it works →</button>
+        <div className="dots">
+          {screens.map((_,i) => <div key={i} onClick={() => go(i)} className={`dot${i===screen?" active":""}`}/>)}
         </div>
-        <div className="feature-card">
-          <div className="feature-card__icon"><span style={{fontSize:"13px"}}>🎁</span></div>
-          <div>
-            <div className="feature-card__title">Just show up for the bow</div>
-            <div className="feature-card__text">Nick handles everything. You pick it up with a gift box on it.</div>
-          </div>
-        </div>
-        <div style={S.sp}/>
-        <button className="btn btn-primary" onClick={() => go(1)}>See how it works <Chev/></button>
       </div>
     );
 
     if (screen === 1) return (
       <div style={{display:"flex",flexDirection:"column",flex:1}}>
-        <div className="eyebrow">Step 1 · What you want</div>
-        <div style={S.h1}>Tell us about<br/>your next<br/><span style={S.em}>car.</span></div>
+        <p className="eyebrow">Step 1 · What you want</p>
+        <div style={S.h1}>Tell us about your next <span style={S.em}>car.</span></div>
         <div style={S.secLabel}>New or used</div>
         <div style={S.pillRow}><span style={S.pill(true)}>New</span><span style={S.pill(false)}>Used</span><span style={S.pill(false)}>Demo</span></div>
         <div style={S.secLabel}>Brand preference</div>
@@ -418,8 +422,8 @@ export default function Hometruth() {
 
     if (screen === 2) return (
       <div style={{display:"flex",flexDirection:"column",flex:1}}>
-        <div className="eyebrow">Dealer snapshot · BMW 3 Series · Free</div>
-        <div style={S.h1}>A taste of what<br/>the dealer won't<br/><span style={S.em}>tell you upfront.</span></div>
+        <p className="eyebrow">Dealer snapshot · BMW 3 Series · Free</p>
+        <div style={S.h1}>A taste of what the dealer won't <span style={S.em}>tell you upfront.</span></div>
         <div className="report-card">
           {[
             ["Drive-away range",<span style={S.rv}>$89,900–$94,200</span>],
@@ -431,7 +435,7 @@ export default function Hometruth() {
             <div key={i} className="report-row"><span style={S.rl}>{l}</span>{v}</div>
           ))}
         </div>
-        <div style={{...S.card, background:P.warnBg, border:`0.5px solid ${P.warnBg}`}}>
+        <div style={S.warnBox}>
           <div style={{fontFamily:P.fontB, fontSize:"12px", color:P.warn, lineHeight:"1.5"}}>
             🔒 <strong>The full report</strong> shows exact margin figures, negotiation ceiling, end-of-quarter targets and Nick's specific strategy for this dealer. <strong>$49 one-off.</strong>
           </div>
@@ -444,8 +448,8 @@ export default function Hometruth() {
 
     if (screen === 3) return (
       <div style={{display:"flex",flexDirection:"column",flex:1}}>
-        <div className="eyebrow">Ask Hometruth · Free</div>
-        <div style={S.h1}>Honest answers.<br/><span style={S.em}>Not what the<br/>dealer wants you to hear.</span></div>
+        <p className="eyebrow">Ask Hometruth · Free</p>
+        <div style={S.h1}>Honest answers. <span style={S.em}>Not what the dealer wants you to hear.</span></div>
         <div style={S.chatName}>You</div>
         <div style={{...S.me,marginBottom:"9px"}}>Is end of quarter really a thing or just a myth?</div>
         <div style={S.askBubble}>
@@ -461,8 +465,8 @@ export default function Hometruth() {
 
     if (screen === 5) return (
       <div style={{display:"flex",flexDirection:"column",flex:1}}>
-        <div className="eyebrow">Nick handles everything</div>
-        <div style={S.h1}>You just show<br/>up for<br/><span style={S.em}>the bow.</span></div>
+        <p className="eyebrow">Nick handles everything</p>
+        <div style={S.h1}>You just show up for <span style={S.em}>the bow.</span></div>
         <div style={S.bowHero}>
           <div style={{fontSize:"36px",marginBottom:"6px"}}>🎁</div>
           <div style={{fontFamily:P.fontD,fontSize:"16px",color:P.onInk,marginBottom:"4px",fontStyle:"italic"}}>"We handed it to Nick."</div>
@@ -489,8 +493,8 @@ export default function Hometruth() {
 
     if (screen === 7) return (
       <div style={{display:"flex",flexDirection:"column",flex:1}}>
-        <div className="eyebrow">Ready when you are</div>
-        <div style={S.h1}>Your next car.<br/><span style={S.em}>Handled.</span></div>
+        <p className="eyebrow">Ready when you are</p>
+        <div style={S.h1}>Your next car. <span style={S.em}>Handled.</span></div>
         <div style={S.sub}>No awkward dealer conversations. No feeling like you got played. Just the car you wanted, at the right price.</div>
         <div className="report-card">
           {[
@@ -513,32 +517,37 @@ export default function Hometruth() {
 
   return (
     <div style={S.wrap}>
-      <div className="phone-shell">
-        <div style={S.statusBar}>
-          <span style={S.time}>9:41</span>
-          <span style={S.wordmark}>Hometruth</span>
-          <div style={S.dots}><div style={S.dot}/><div style={S.dot}/><div style={S.dot}/></div>
-        </div>
-        <div className="segmented">
-          <button className={`segmented__item${vertical==="homes"?" is-active":""}`} onClick={() => switchVertical("homes")}>🏠 Homes</button>
-          <button className={`segmented__item${vertical==="cars"?" is-active":""}`} onClick={() => switchVertical("cars")}>🚗 Cars</button>
-        </div>
-        <div className="screen" style={{opacity:entered?1:0, transform:entered?"translateY(0)":"translateY(6px)", transition:"opacity 0.3s ease, transform 0.3s ease", overflow:"hidden"}}>
+      <div className="phone">
+        {/* Animated screen — includes brand, segmented, and screen content */}
+        <div
+          className="screen"
+          style={{opacity:entered?1:0, transform:entered?"translateY(0)":"translateY(6px)", transition:"opacity 0.3s ease, transform 0.3s ease", overflow:"hidden"}}
+        >
+          <div className="brand">HOMETRUTH</div>
+          <div className="segmented">
+            <button className={`tab${vertical==="homes"?" active":""}`} onClick={() => switchVertical("homes")}>🏠 Homes</button>
+            <button className={`tab${vertical==="cars"?" active":""}`} onClick={() => switchVertical("cars")}>🚗 Cars</button>
+          </div>
           {vertical === "homes" ? <HomesScreen/> : <CarsScreen/>}
         </div>
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 20px 14px",flexShrink:0}}>
-          <button onClick={() => go(screen-1)} disabled={screen===0} style={{width:"36px",height:"36px",borderRadius:"50%",border:`0.5px solid ${screen===0?"transparent":P.border}`,background:"transparent",cursor:screen===0?"default":"pointer",display:"flex",alignItems:"center",justifyContent:"center",opacity:screen===0?0:1,transition:"opacity 0.2s"}}>
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke={P.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          </button>
-          <div style={{display:"flex",gap:"5px",alignItems:"center"}}>
-            {screens.map((_,i) => <div key={i} onClick={() => go(i)} style={{width:i===screen?"18px":"6px",height:"6px",borderRadius:i===screen?"3px":"50%",background:i===screen?P.nav:P.border,cursor:"pointer",transition:"all 0.25s ease"}}/>)}
+
+        {/* Bottom nav — hidden on hero (hero has its own dots) */}
+        {screen !== 0 && (
+          <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", padding:"6px 20px 18px", flexShrink:0}}>
+            <button onClick={() => go(screen-1)} style={S.navBtn(screen > 0)}>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke={P.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </button>
+            <div className="dots" style={{margin:0}}>
+              {screens.map((_,i) => <div key={i} onClick={() => go(i)} className={`dot${i===screen?" active":""}`}/>)}
+            </div>
+            <button onClick={() => go(screen+1)} style={S.navBtn(screen < screens.length - 1)}>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke={P.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </button>
           </div>
-          <button onClick={() => go(screen+1)} disabled={screen===screens.length-1} style={{width:"36px",height:"36px",borderRadius:"50%",border:`0.5px solid ${screen===screens.length-1?"transparent":P.border}`,background:"transparent",cursor:screen===screens.length-1?"default":"pointer",display:"flex",alignItems:"center",justifyContent:"center",opacity:screen===screens.length-1?0:1,transition:"opacity 0.2s"}}>
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke={P.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          </button>
-        </div>
+        )}
       </div>
-      <div style={{marginTop:"12px",fontFamily:P.fontB,fontSize:"11px",color:P.textSub,letterSpacing:"0.06em",textTransform:"uppercase"}}>
+
+      <div style={{marginTop:"12px", fontFamily:P.fontB, fontSize:"11px", color:P.textSub, letterSpacing:"0.06em", textTransform:"uppercase"}}>
         {vertical==="homes"?"Homes":"Cars"} · {screens[screen]}
       </div>
     </div>
