@@ -1,38 +1,90 @@
-import React from 'react';
+'use client';
 
-const REPORT_ITEMS = [
-  'Comparable sales — last 12 months, same street and suburb',
-  'True reserve estimate — based on agent intel and recent results',
-  'Auction strategy — when to bid, where to stop, how to read the room',
-  'Building and pest flags — what to check before you spend $700 on an inspection',
-  'Suburb deep dive — where the area is heading and why',
-  "Nick's recommendation — buy, pass, or negotiate",
-];
+import React, { useState } from 'react';
+import { FullReport, type FullReportData } from './FullReport';
+import type { PropertyData } from './PropertyCard';
+import type { BuyerAnswers } from '../conversation/ConversationFlow';
 
 interface GateCardProps {
-  onUnlock?: () => void;
+  property: PropertyData;
+  buyerAnswers: BuyerAnswers;
 }
 
-export function GateCard({ onUnlock }: GateCardProps) {
-  return (
-    <div className="report-card animate-in" style={{ animationDelay: '0.35s' }}>
-      <div className="eyebrow">Full Report — $49</div>
-      <div className="section-title">Everything you need to make the call</div>
-      <p className="body-text">One payment. One property. No subscription.</p>
+type Phase = 'idle' | 'loading' | 'success' | 'error';
 
-      {REPORT_ITEMS.map((item, i) => (
-        <div className="report-row" key={i}>
-          <span className="report-row-icon">→</span>
-          <span>{item}</span>
+export function GateCard({ property, buyerAnswers }: GateCardProps) {
+  const [phase, setPhase] = useState<Phase>('idle');
+  const [reportData, setReportData] = useState<FullReportData | null>(null);
+  const [errorMsg, setErrorMsg] = useState('');
+
+  async function handleGenerate() {
+    setPhase('loading');
+    try {
+      const res = await fetch('/api/report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ property, buyerAnswers }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error ?? `Failed (${res.status})`);
+      }
+      const data: FullReportData = await res.json();
+      setReportData(data);
+      setPhase('success');
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Something went wrong.';
+      setErrorMsg(msg);
+      setPhase('error');
+    }
+  }
+
+  if (phase === 'success' && reportData) {
+    return (
+      <div className="animate-in">
+        <div className="report-property-context">
+          <div className="eyebrow">Full Report</div>
+          <div className="report-property-name">{property.address}, {property.suburb}</div>
         </div>
-      ))}
+        <FullReport data={reportData} />
+      </div>
+    );
+  }
 
-      <button className="btn-gold" onClick={onUnlock}>
-        Get the full report — $49
+  if (phase === 'loading') {
+    return (
+      <div className="report-loading">
+        <div className="loading-spinner" role="status" aria-label="Generating report" />
+        <div className="loading-text">Nick's writing this up…</div>
+        <div className="loading-sub">Pulling comparables, reading the market, checking the numbers.</div>
+      </div>
+    );
+  }
+
+  if (phase === 'error') {
+    return (
+      <div className="report-error-card">
+        <p className="error-body">{errorMsg}</p>
+        <button className="btn-ghost" onClick={() => setPhase('idle')} style={{ marginTop: '12px' }}>
+          Try again
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="report-trigger-card animate-in">
+      <div className="report-trigger-header">
+        <div className="eyebrow">Nick's Full Analysis</div>
+        <div className="section-title">{property.address}</div>
+        <p className="body-text">Comparable sales, reserve estimate, auction strategy and Nick's straight recommendation.</p>
+      </div>
+      <button className="btn-primary" onClick={handleGenerate}>
+        Get Nick's full report
       </button>
-
-      <p style={{ fontSize: '0.75rem', color: 'rgba(255,250,245,0.55)', textAlign: 'center', marginTop: '12px', lineHeight: '1.5' }}>
-        A portion of every report goes to a Melbourne homeless charity.
+      <p className="disclosure-text">
+        HomeTruth receives a spotter fee if you proceed with a referred conveyancer, broker, or inspector.
+        Disclosed upfront and never affects Nick's advice.
       </p>
     </div>
   );

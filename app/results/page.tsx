@@ -2,8 +2,10 @@
 
 import React, { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { PropertyCard, type PropertyData } from '@/components/property/PropertyCard';
 import { GateCard } from '@/components/property/GateCard';
+import type { BuyerAnswers } from '@/components/conversation/ConversationFlow';
 
 interface SearchResult {
   intro: string;
@@ -15,14 +17,15 @@ function ResultsContent() {
   const router = useRouter();
   const [state, setState] = useState<'loading' | 'success' | 'error'>('loading');
   const [result, setResult] = useState<SearchResult | null>(null);
+  const [buyerAnswers, setBuyerAnswers] = useState<BuyerAnswers | null>(null);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    const answers = {
+    const answers: BuyerAnswers = {
       location: searchParams.get('location') ?? '',
       budget: searchParams.get('budget') ?? '',
       household: searchParams.get('household') ?? '',
-      weeklyLife: searchParams.get('weeklyLife') ?? '',
+      mustHaves: searchParams.get('mustHaves') ?? '',
       hardNos: searchParams.get('hardNos') ?? '',
       lifestyle: searchParams.get('lifestyle') ?? '',
     };
@@ -31,6 +34,8 @@ function ResultsContent() {
       router.replace('/');
       return;
     }
+
+    setBuyerAnswers(answers);
 
     fetch('/api/search', {
       method: 'POST',
@@ -77,13 +82,15 @@ function ResultsContent() {
     );
   }
 
-  if (!result) return null;
+  if (!result || !buyerAnswers) return null;
 
   return (
     <div className="results-wrap">
       {result.intro && (
         <div className="nick-intro animate-in">
-          <div className="nick-avatar" aria-hidden="true">N</div>
+          <div className="nick-avatar-img" aria-hidden="true">
+            <Image src="/nick-avatar.svg" alt="Nick" width={42} height={42} />
+          </div>
           <div>
             <div className="nick-name-label">Nick</div>
             <div className="question-bubble results-intro">{result.intro}</div>
@@ -95,12 +102,9 @@ function ResultsContent() {
         <PropertyCard key={i} property={property} index={i} />
       ))}
 
-      <GateCard />
-
-      <p style={{ fontSize: '0.75rem', color: 'var(--text-hint)', textAlign: 'center', padding: '8px 0 4px', lineHeight: '1.5' }}>
-        HomeTruth receives a spotter fee if you proceed with a referred conveyancer, broker, or inspector.
-        This is disclosed upfront and never affects Nick's advice.
-      </p>
+      {result.properties.length > 0 && (
+        <GateCard property={result.properties[0]} buyerAnswers={buyerAnswers} />
+      )}
     </div>
   );
 }

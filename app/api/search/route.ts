@@ -8,7 +8,7 @@ const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { location, budget, household, weeklyLife, hardNos, lifestyle } = body;
+    const { location, budget, household, mustHaves, hardNos, lifestyle } = body;
 
     if (!location || !budget) {
       return NextResponse.json({ error: 'Missing required buyer answers' }, { status: 400 });
@@ -18,9 +18,9 @@ export async function POST(req: NextRequest) {
       `Location preference: ${location}`,
       `Budget: ${budget}`,
       `Household: ${household}`,
-      `Typical week: ${weeklyLife}`,
+      `Property must-haves: ${mustHaves}`,
       `Hard nos: ${hardNos}`,
-      `Lifestyle: ${lifestyle}`,
+      `Lifestyle & timing: ${lifestyle}`,
     ].join('\n');
 
     // Step 1: Generate search queries
