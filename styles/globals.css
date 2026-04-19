@@ -57,6 +57,26 @@ a {
   background: var(--surface);
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.start-over-link {
+  font-size: 0.75rem;
+  color: var(--text-hint);
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-weight: 400;
+  transition: color 0.15s ease;
+  cursor: pointer;
+}
+
+.start-over-link:hover {
+  color: var(--text-sub);
+}
+
 .app-logo {
   font-family: var(--font-display);
   font-size: 1.35rem;
@@ -791,17 +811,17 @@ a {
 /* ── Nick Avatar Image ────────────────────────────────────── */
 
 .nick-avatar-img {
-  width: 42px;
-  height: 42px;
+  width: 56px;
+  height: 56px;
   border-radius: var(--radius-full);
   overflow: hidden;
   flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(74, 52, 35, 0.15);
+  box-shadow: 0 2px 10px rgba(74, 52, 35, 0.18);
 }
 
 .nick-avatar-img img {
-  width: 42px;
-  height: 42px;
+  width: 56px;
+  height: 56px;
   display: block;
 }
 
@@ -815,20 +835,20 @@ a {
   width: 100%;
 }
 
-.landing-wordmark {
+.landing-tagline {
   font-family: var(--font-display);
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--accent);
-  letter-spacing: -0.03em;
-  line-height: 1;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  line-height: 1.3;
   margin-bottom: var(--space-2);
 }
 
-.landing-tagline {
+.landing-subtext {
+  font-family: var(--font-body);
   font-size: 0.9rem;
   color: var(--text-hint);
-  font-style: italic;
   line-height: 1.5;
 }
 
@@ -1162,4 +1182,130 @@ a {
   font-size: 0.75rem;
   color: var(--text-hint);
   margin-top: 2px;
+}
+
+/* ── Typing Indicator ─────────────────────────────────────── */
+
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-3) var(--space-4);
+  min-height: 36px;
+}
+
+.typing-indicator span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--text-hint);
+  animation: typingBounce 1.2s infinite ease-in-out;
+}
+
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-5px); opacity: 1; }
+}
+
+/* ── Verdict Banner ───────────────────────────────────────── */
+
+.verdict-banner {
+  padding: var(--space-3) var(--space-5);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  border-bottom: 1px solid var(--border);
+}
+
+.verdict-banner-pursue {
+  background: rgba(127, 151, 143, 0.12);
+  color: var(--sage-dark);
+}
+
+.verdict-banner-pass {
+  background: rgba(198, 90, 50, 0.08);
+  color: var(--accent);
+}
+
+.verdict-banner-conditional {
+  background: rgba(183, 132, 44, 0.1);
+  color: var(--gold);
+}
+
+/* ── Price Chart ──────────────────────────────────────────── */
+
+.price-chart-wrap {
+  padding: var(--space-4) 0 var(--space-3);
+  border-top: 1px solid var(--border);
+}
+
+.price-chart-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-hint);
+  margin-bottom: var(--space-4);
+}
+
+.price-chart-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+  height: 80px;
+}
+
+.price-chart-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+}
+
+.price-chart-bar-wrap {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.price-chart-bar {
+  width: 100%;
+  border-radius: 3px 3px 0 0;
+  background: radial-gradient(120% 140% at 0% 0%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 34%), linear-gradient(180deg, var(--accent-mid) 0%, var(--accent) 60%, var(--accent-dark) 100%);
+  min-height: 4px;
+  transition: height 0.4s ease;
+}
+
+.price-chart-month {
+  font-size: 0.65rem;
+  color: var(--text-hint);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.price-chart-value {
+  font-size: 0.6rem;
+  color: var(--text-hint);
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* ── Finance Broker Note ──────────────────────────────────── */
+
+.finance-broker-note {
+  padding: var(--space-3) var(--space-5) var(--space-4);
+  font-size: 0.8125rem;
+  color: var(--accent);
+  font-weight: 500;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-body);
 }

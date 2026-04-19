@@ -21,7 +21,7 @@ const QUESTION_KEYS = ['location', 'budget', 'household', 'mustHaves', 'hardNos'
 
 export type BuyerAnswers = Record<typeof QUESTION_KEYS[number], string>;
 
-function buildAck(questionIndex: number): string {
+function buildFallbackAck(questionIndex: number): string {
   switch (questionIndex) {
     case 0: return 'Got it — I know that part of the market.';
     case 1: return 'Noted. I can work with that.';
@@ -32,9 +32,21 @@ function buildAck(questionIndex: number): string {
   }
 }
 
+async function fetchContextualAck(question: string, answer: string, questionIndex: number): Promise<string> {
+  const res = await fetch('/api/ack', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ question, answer, questionIndex }),
+  });
+  if (!res.ok) throw new Error('ack failed');
+  const data = await res.json();
+  return data.ack ?? buildFallbackAck(questionIndex);
+}
+
 interface Turn {
   type: 'question' | 'answer' | 'ack';
   text: string;
+  loading?: boolean;
 }
 
 interface ConversationFlowProps {
@@ -56,7 +68,7 @@ export function ConversationFlow({ onComplete }: ConversationFlowProps) {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [turns]);
 
-  function handleSubmit() {
+  async function handleSubmit() {
     const text = inputValue.trim();
     if (!text || isTransitioning) return;
 
@@ -88,27 +100,34 @@ export function ConversationFlow({ onComplete }: ConversationFlowProps) {
     setAnswers(newAnswers);
 
     const nextIndex = currentQuestion + 1;
-    const ack = buildAck(currentQuestion);
 
-    if (nextIndex >= QUESTIONS.length) {
-      setTimeout(() => {
-        setTurns(prev => [...prev, { type: 'ack', text: ack }]);
-        setTimeout(() => {
-          setTurns(prev => [...prev, { type: 'question', text: FOLLOW_UP }]);
-          setFollowUpPhase(true);
-          setIsTransitioning(false);
-        }, 420);
-      }, 300);
-    } else {
-      setTimeout(() => {
-        setTurns(prev => [...prev, { type: 'ack', text: ack }]);
-        setTimeout(() => {
-          setTurns(prev => [...prev, { type: 'question', text: QUESTIONS[nextIndex] }]);
-          setCurrentQuestion(nextIndex);
-          setIsTransitioning(false);
-        }, 420);
-      }, 300);
+    // Show typing indicator while fetching contextual ack
+    setTurns(prev => [...prev, { type: 'ack', text: '', loading: true }]);
+
+    let ackText = buildFallbackAck(currentQuestion);
+    try {
+      ackText = await fetchContextualAck(QUESTIONS[currentQuestion], text, currentQuestion);
+    } catch {
+      // fallback already set
     }
+
+    // Replace loading ack with real text
+    setTurns(prev => {
+      const updated = [...prev];
+      updated[updated.length - 1] = { type: 'ack', text: ackText };
+      return updated;
+    });
+
+    setTimeout(() => {
+      if (nextIndex >= QUESTIONS.length) {
+        setTurns(prev => [...prev, { type: 'question', text: FOLLOW_UP }]);
+        setFollowUpPhase(true);
+      } else {
+        setTurns(prev => [...prev, { type: 'question', text: QUESTIONS[nextIndex] }]);
+        setCurrentQuestion(nextIndex);
+      }
+      setIsTransitioning(false);
+    }, 300);
   }
 
   return (
@@ -137,11 +156,17 @@ export function ConversationFlow({ onComplete }: ConversationFlowProps) {
             return (
               <div key={i} className="nick-intro animate-in">
                 <div className="nick-avatar-img" aria-hidden="true">
-                  <Image src="/nick-avatar.svg" alt="Nick" width={42} height={42} />
+                  <Image src="/nick-avatar.png" alt="Nick" width={56} height={56} />
                 </div>
                 <div>
                   <div className="nick-name-label">Nick</div>
-                  <div className="acknowledgement-bubble">{turn.text}</div>
+                  {turn.loading ? (
+                    <div className="acknowledgement-bubble typing-indicator">
+                      <span /><span /><span />
+                    </div>
+                  ) : (
+                    <div className="acknowledgement-bubble">{turn.text}</div>
+                  )}
                 </div>
               </div>
             );

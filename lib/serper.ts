@@ -12,6 +12,8 @@ export interface SerperResponse {
 
 export async function searchProperties(queries: string[]): Promise<SerperResponse> {
   const apiKey = process.env.SERPER_API_KEY;
+  console.log('[Serper] API key present:', !!apiKey, '| key prefix:', apiKey ? apiKey.slice(0, 6) + '…' : 'MISSING');
+
   if (!apiKey) {
     throw new Error('SERPER_API_KEY is not configured');
   }
@@ -19,6 +21,8 @@ export async function searchProperties(queries: string[]): Promise<SerperRespons
   const allResults: SerperResult[] = [];
 
   for (const query of queries) {
+    console.log('[Serper] Running query:', query);
+
     const response = await fetch('https://google.serper.dev/search', {
       method: 'POST',
       headers: {
@@ -33,12 +37,21 @@ export async function searchProperties(queries: string[]): Promise<SerperRespons
       }),
     });
 
+    console.log('[Serper] Response status:', response.status);
+
     if (!response.ok) {
-      console.error(`Serper query failed: ${query}`, response.status);
+      const errText = await response.text().catch(() => '');
+      console.error(`[Serper] Query failed (${response.status}):`, query, errText);
       continue;
     }
 
     const data = await response.json();
+    console.log('[Serper] Raw response keys:', Object.keys(data));
+    console.log('[Serper] Organic count:', data.organic?.length ?? 0);
+
+    if (data.organic?.length > 0) {
+      console.log('[Serper] First organic item:', JSON.stringify(data.organic[0], null, 2));
+    }
 
     if (data.organic) {
       for (const item of data.organic) {
@@ -46,11 +59,12 @@ export async function searchProperties(queries: string[]): Promise<SerperRespons
           title: item.title ?? '',
           link: item.link ?? '',
           snippet: item.snippet ?? '',
-          imageUrl: item.imageUrl ?? undefined,
+          imageUrl: item.imageUrl ?? item.thumbnail ?? undefined,
         });
       }
     }
   }
 
+  console.log('[Serper] Total results collected:', allResults.length);
   return { organic: allResults, queries };
 }

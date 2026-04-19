@@ -80,7 +80,7 @@ export function GateCard({ property, buyerAnswers }: GateCardProps) {
         <p className="body-text">Comparable sales, reserve estimate, auction strategy and Nick's straight recommendation.</p>
       </div>
       <button className="btn-primary" onClick={handleGenerate}>
-        Get Nick's full report
+        Get Nick's full report — $49
       </button>
       <p className="disclosure-text">
         HomeTruth receives a spotter fee if you proceed with a referred conveyancer, broker, or inspector.

@@ -89,7 +89,7 @@ function ResultsContent() {
       {result.intro && (
         <div className="nick-intro animate-in">
           <div className="nick-avatar-img" aria-hidden="true">
-            <Image src="/nick-avatar.svg" alt="Nick" width={42} height={42} />
+            <Image src="/nick-avatar.png" alt="Nick" width={56} height={56} />
           </div>
           <div>
             <div className="nick-name-label">Nick</div>

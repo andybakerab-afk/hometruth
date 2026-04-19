@@ -31,7 +31,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="app-logo">
               Home<span>Truth</span>
             </div>
-            <div className="eyebrow">by Pickle</div>
+            <div className="header-right">
+              <div className="eyebrow">by Pickle</div>
+              <a href="/" className="start-over-link">Start over</a>
+            </div>
           </header>
           <main className="app-main">
             {children}

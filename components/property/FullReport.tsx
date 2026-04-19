@@ -7,6 +7,11 @@ interface Comparable {
   note: string;
 }
 
+interface PriceTrendPoint {
+  month: string;
+  value: number;
+}
+
 export interface FullReportData {
   suburbDeepDive: {
     priceTrends: string;
@@ -14,6 +19,7 @@ export interface FullReportData {
     daysOnMarket: string;
     whoBuysHere: string;
     whatChanging: string;
+    priceTrendData?: PriceTrendPoint[];
   };
   propertyAnalysis: {
     trueReserve: string;
@@ -28,6 +34,17 @@ export interface FullReportData {
     walkAway: string;
     watchFor: string;
   };
+  financeSnapshot?: {
+    estimatedPurchasePrice: string;
+    deposit20pct: string;
+    loanAmount: string;
+    monthlyVariableRepayment: string;
+    monthlyFixedRepayment: string;
+    stampDuty: string;
+    conveyancing: string;
+    buildingInspection: string;
+    totalFundsNeeded: string;
+  };
   nicksRecommendation: {
     verdict: 'pursue' | 'pass' | 'conditional';
     verdictReason: string;
@@ -39,29 +56,27 @@ export interface FullReportData {
 const VERDICT_LABELS: Record<string, string> = {
   pursue: 'Pursue this one',
   pass: 'Pass on this one',
-  conditional: 'Conditional — conditions apply',
+  conditional: 'Conditional',
 };
 
 export function FullReport({ data }: { data: FullReportData }) {
-  const { nicksRecommendation: rec, suburbDeepDive: suburb, propertyAnalysis: prop, auctionStrategy: auction } = data;
+  const { nicksRecommendation: rec, suburbDeepDive: suburb, propertyAnalysis: prop, auctionStrategy: auction, financeSnapshot: finance } = data;
 
   return (
     <div className="full-report">
 
-      {/* Nick's Recommendation — top, most prominent */}
-      <div className={`verdict-card verdict-${rec.verdict}`}>
-        <div className="eyebrow">Nick's Recommendation</div>
-        <div className="verdict-label">{VERDICT_LABELS[rec.verdict] ?? rec.verdict}</div>
-        <p className="verdict-reason">{rec.verdictReason}</p>
-        <div className="verdict-conditions">
-          <div className="verdict-condition">
-            <span className="verdict-condition-label warn">Walk away if</span>
-            <span className="verdict-condition-text">{rec.walkAwayIf}</span>
-          </div>
-          <div className="verdict-condition">
-            <span className="verdict-condition-label good">Go hard if</span>
-            <span className="verdict-condition-text">{rec.goHardIf}</span>
-          </div>
+      {/* Nick's Recommendation */}
+      <div className="report-section">
+        <div className="report-section-header">
+          <div className="report-section-title">Nick's Recommendation</div>
+        </div>
+        <div className={`verdict-banner verdict-banner-${rec.verdict}`}>
+          {VERDICT_LABELS[rec.verdict] ?? rec.verdict}
+        </div>
+        <div className="report-section-body">
+          <ReportDataRow label="Assessment" value={rec.verdictReason} />
+          <ReportDataRow label="Walk away if" value={rec.walkAwayIf} />
+          <ReportDataRow label="Go hard if" value={rec.goHardIf} last />
         </div>
       </div>
 
@@ -75,7 +90,10 @@ export function FullReport({ data }: { data: FullReportData }) {
           <ReportDataRow label="Clearance Rate" value={suburb.clearanceRate} />
           <ReportDataRow label="Days on Market" value={suburb.daysOnMarket} />
           <ReportDataRow label="Who Buys Here" value={suburb.whoBuysHere} />
-          <ReportDataRow label="What's Changing" value={suburb.whatChanging} last />
+          <ReportDataRow label="What's Changing" value={suburb.whatChanging} last={!suburb.priceTrendData?.length} />
+          {suburb.priceTrendData && suburb.priceTrendData.length > 0 && (
+            <PriceChart data={suburb.priceTrendData} />
+          )}
         </div>
       </div>
 
@@ -85,14 +103,10 @@ export function FullReport({ data }: { data: FullReportData }) {
           <div className="report-section-title">Property Analysis</div>
         </div>
         <div className="report-section-body">
-          <div className="true-reserve-block">
-            <div className="true-reserve-label">Nick's Reserve Estimate</div>
-            <div className="true-reserve-value">{prop.trueReserve}</div>
-            <p className="true-reserve-reasoning">{prop.reserveReasoning}</p>
-          </div>
-
+          <ReportDataRow label="Nick's Reserve" value={prop.trueReserve} highlight />
+          <ReportDataRow label="Reserve Reasoning" value={prop.reserveReasoning} />
           <ReportDataRow label="Quoted Price Read" value={prop.quotedPriceRead} />
-          <ReportDataRow label="Building & Pest" value={prop.buildingPestFlags} />
+          <ReportDataRow label="Building & Pest" value={prop.buildingPestFlags} last={!prop.comparables?.length} />
 
           {prop.comparables?.length > 0 && (
             <div className="comparables">
@@ -127,6 +141,29 @@ export function FullReport({ data }: { data: FullReportData }) {
         </div>
       </div>
 
+      {/* Finance Snapshot */}
+      {finance && (
+        <div className="report-section">
+          <div className="report-section-header">
+            <div className="report-section-title">Finance Snapshot</div>
+          </div>
+          <div className="report-section-body">
+            <ReportDataRow label="Est. Purchase Price" value={finance.estimatedPurchasePrice} />
+            <ReportDataRow label="20% Deposit" value={finance.deposit20pct} />
+            <ReportDataRow label="Loan Amount" value={finance.loanAmount} highlight />
+            <ReportDataRow label="Variable Repayment" value={`${finance.monthlyVariableRepayment} at 6.5% p.a.`} />
+            <ReportDataRow label="Fixed Repayment" value={`${finance.monthlyFixedRepayment} at 6.1% p.a.`} />
+            <ReportDataRow label="Stamp Duty (VIC)" value={finance.stampDuty} />
+            <ReportDataRow label="Conveyancing" value={finance.conveyancing} />
+            <ReportDataRow label="Building Inspection" value={finance.buildingInspection} />
+            <ReportDataRow label="Total Funds Needed" value={finance.totalFundsNeeded} highlight last />
+          </div>
+          <div className="finance-broker-note">
+            Connect with Nick&apos;s broker for a personalised assessment.
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
@@ -141,6 +178,36 @@ function ReportDataRow({ label, value, last = false, highlight = false }: {
     <div className={`report-data-row${last ? ' last' : ''}${highlight ? ' highlight' : ''}`}>
       <div className="report-data-label">{label}</div>
       <div className="report-data-value">{value}</div>
+    </div>
+  );
+}
+
+function PriceChart({ data }: { data: PriceTrendPoint[] }) {
+  const values = data.map(d => d.value);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const range = max - min || 1;
+
+  return (
+    <div className="price-chart-wrap">
+      <div className="price-chart-label">6-Month Price Trend</div>
+      <div className="price-chart-bars">
+        {data.map((point, i) => {
+          const heightPct = 20 + ((point.value - min) / range) * 80;
+          return (
+            <div key={i} className="price-chart-col">
+              <div className="price-chart-bar-wrap">
+                <div
+                  className="price-chart-bar"
+                  style={{ height: `${heightPct}%` }}
+                />
+              </div>
+              <div className="price-chart-month">{point.month}</div>
+              <div className="price-chart-value">${point.value}k</div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

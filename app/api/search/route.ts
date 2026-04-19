@@ -41,18 +41,26 @@ export async function POST(req: NextRequest) {
 
     // Step 2: Fetch Serper results
     let serperResultsText = 'No search results available.';
+    console.log('[Search API] SERPER_API_KEY present:', !!process.env.SERPER_API_KEY);
+    console.log('[Search API] Generated queries:', queries);
     try {
       if (process.env.SERPER_API_KEY) {
         const serperResponse = await searchProperties(queries);
+        console.log('[Search API] Serper returned', serperResponse.organic.length, 'total results');
         if (serperResponse.organic.length > 0) {
-          serperResultsText = serperResponse.organic
-            .slice(0, 15)
+          const top = serperResponse.organic.slice(0, 15);
+          console.log('[Search API] Top results:', top.map(r => ({ title: r.title, link: r.link, hasImage: !!r.imageUrl })));
+          serperResultsText = top
             .map((r, i) => `[${i + 1}] ${r.title}\nURL: ${r.link}\n${r.snippet}${r.imageUrl ? `\nImage: ${r.imageUrl}` : ''}`)
             .join('\n\n');
+        } else {
+          console.warn('[Search API] No Serper results — Claude will use illustrative properties');
         }
+      } else {
+        console.warn('[Search API] SERPER_API_KEY missing — skipping Serper, Claude will use illustrative properties');
       }
     } catch (err) {
-      console.error('Serper error:', err);
+      console.error('[Search API] Serper error:', err);
     }
 
     // Step 3: Claude analyses and returns structured properties

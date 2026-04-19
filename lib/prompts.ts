@@ -81,7 +81,15 @@ Return a JSON object with this exact structure:
     "clearanceRate": "Auction clearance rate with context — is this suburb competitive right now",
     "daysOnMarket": "Typical days on market and what it signals about buyer demand",
     "whoBuysHere": "Who actually buys in this suburb — the real demographic, not the marketing version",
-    "whatChanging": "What's shifting here — gentrification, oversupply, infrastructure, anything material"
+    "whatChanging": "What's shifting here — gentrification, oversupply, infrastructure, anything material",
+    "priceTrendData": [
+      { "month": "Nov", "value": 920 },
+      { "month": "Dec", "value": 935 },
+      { "month": "Jan", "value": 928 },
+      { "month": "Feb", "value": 942 },
+      { "month": "Mar", "value": 958 },
+      { "month": "Apr", "value": 965 }
+    ]
   },
   "propertyAnalysis": {
     "trueReserve": "Nick's honest reserve estimate — a specific number or tight range",
@@ -100,6 +108,17 @@ Return a JSON object with this exact structure:
     "walkAway": "Hard walk-away number — the point where you stop bidding no matter what",
     "watchFor": "Specific things to watch on auction day — agent behaviour, crowd signals, how other bidders are acting"
   },
+  "financeSnapshot": {
+    "estimatedPurchasePrice": "Best estimate of final sale price as a formatted dollar amount e.g. $920,000",
+    "deposit20pct": "20% of estimated purchase price as formatted dollar amount",
+    "loanAmount": "80% of estimated purchase price as formatted dollar amount",
+    "monthlyVariableRepayment": "Monthly P&I repayment at 6.5% p.a. over 30 years as formatted dollar amount e.g. $4,640/month — use correct mortgage formula",
+    "monthlyFixedRepayment": "Monthly P&I repayment at 6.1% p.a. over 30 years as formatted dollar amount — use correct mortgage formula",
+    "stampDuty": "Victoria stamp duty on the estimated purchase price using current VIC duty rates, formatted dollar amount",
+    "conveyancing": "$3,000",
+    "buildingInspection": "$800",
+    "totalFundsNeeded": "deposit + stamp duty + $3,000 + $800 as formatted dollar amount"
+  },
   "nicksRecommendation": {
     "verdict": "pursue | pass | conditional",
     "verdictReason": "2-3 sentences. Direct. Honest. No hedge.",
@@ -107,6 +126,10 @@ Return a JSON object with this exact structure:
     "goHardIf": "One specific condition that would make Nick tell this buyer to go all in"
   }
 }
+
+For priceTrendData: use realistic indicative median prices in $k for this suburb over the last 6 months ending this month. Values should reflect real suburb price levels and actual trend direction — up, flat, or down.
+
+For financeSnapshot: calculate Victoria stamp duty correctly. For a property between $130,001–$960,000 the duty is $2,870 + 6% of excess over $130,000. Calculate monthlyVariableRepayment using: M = L × r(1+r)^n / ((1+r)^n − 1) where r = 0.065/12, n = 360. Calculate monthlyFixedRepayment with r = 0.061/12.
 
 Use real Melbourne market knowledge. Be direct and honest — this buyer is trusting you with a major decision.
 Return only the JSON object, nothing else.`;
